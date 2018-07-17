@@ -45,7 +45,7 @@ For example when you toggle someting on the page. In this case opening an accord
 
 Here you can se that the view function of the program is the largest part of rendering.
 
-Even though the html-inline approach has the same html elements, it takes more time on both *view* and *diff* since it also has to handle all the style attributes.
+Even though the html-inline approach has the same html elements as html-css, it takes more time on both *view* and *diff* since it also has to handle all the style attributes.
 
 Stylish Elephants does a lot more work for you than just generating a Virtual Dom tree, so this comparisation is quite unfair. But on the other hand, this is a performance test.
 
