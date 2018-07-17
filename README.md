@@ -20,7 +20,7 @@ The rendering times are printed to the console using [console.time](https://deve
 2. **diff**: The time it takes to compare the generated tree with previous VDOM tree and generating a patch (the Reconciliation algorithm).
 3. **apply**: This is the time it takes to apply the changes to the "real" DOM.
 
-Two scenarios can easly be compared:
+Two scenarios can be compared in this app:
 
 1. A small portion of the DOM is changed. (Open / Close the accordion)
 2. The whole page is re-rendered. (Change the Implementation)
