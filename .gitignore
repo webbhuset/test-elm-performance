@@ -1,0 +1,7 @@
+elm-stuff/build-artifacts
+elm-stuff/packages/*
+build
+
+!elm-stuff/packages/elm-lang
+elm-stuff/packages/elm-lang/*
+!elm-stuff/packages/elm-lang/virtual-dom
