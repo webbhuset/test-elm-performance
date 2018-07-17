@@ -1,4 +1,4 @@
-You can run the [test here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html).
+You can open the [test here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html).
 
 This is a simple, non-scientific test of the render performance in the Elm Virtual DOM.
 
