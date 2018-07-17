@@ -14,7 +14,7 @@ Three common approaches of working with style / layout are implemented and can b
 * [Stylish Elephants](http://package.elm-lang.org/packages/mdgriffith/stylish-elephants/6.0.2) 6.0.2
 
 One UI component (an accordion) is implemented with each of the above techniques and can be compared.
-The rendering times are printed to the console using [console.time](https://developer.mozilla.org/en-US/docs/Web/API/Console/time) and [console.timeEnd](https://developer.mozilla.org/en-US/docs/Web/API/Console/timeEnd). Three metrics are logged:
+The rendering times are printed to the console using [console.time](https://developer.mozilla.org/en-US/docs/Web/API/Console/time) and [console.timeEnd](https://developer.mozilla.org/en-US/docs/Web/API/Console/timeEnd). This is achieved by patching the virtual-dom package. Three metrics are logged:
 
 1. **view**: The time of the view function in the Elm program.
 2. **diff**: The time it takes to compare the generated tree with previous VDOM tree and generating a patch (the Reconciliation algorithm).
