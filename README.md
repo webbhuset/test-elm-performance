@@ -32,7 +32,7 @@ Two scenarios can be compared in this app:
 For example when you toggle someting on the page. In this case opening an accordion.
 
 * 1000 Accordions on an slow desktop computer.
-* Avrage values from opening and closing the first accordion 10 times.
+* Average values from opening and closing the first accordion 10 times.
 
 |             | HTML-CSS | HTML Inline |  SE   |
 | ----------- | -------- | ----------- | ----- |
