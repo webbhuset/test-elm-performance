@@ -55,7 +55,7 @@ Since just one element has to be changed, the apply step is below 1ms and does n
 
 ### Replacing a lot
 
-This could be when switcing page in your application.
+This could be when switching page in your application.
 
 * 1000 Accordions on an slow desktop computer.
 * Switching between the three implementations.
