@@ -84,45 +84,15 @@ Here are some results from different devices showing how FPS decreases as the ac
 
 #### Desktop i7 4.5Ghz
 
-|      | HTML CSS | HTML Inline | S Elephants |
-| ---- | -------- | ----------- | ----------- |
-| 64   |       60 |          60 |          60 |
-| 128  |       60 |          60 |          59 |
-| 256  |       60 |          60 |          41 |
-| 512  |       60 |          60 |          20 |
-| 1024 |       59 |          58 |          10 |
-| 2048 |       57 |          55 |           5 |
-| 4096 |       43 |          29 |           2 |
-| 8192 |       25 |          16 |           1 |
-
+[![desktop](results/desktop-fps.png)](results/charts.html)
 
 #### Macbook Pro 13" (2015)
 
-|      | HTML CSS | HTML Inline | S Elephants |
-| ---- | -------- | ----------- | ----------- |
-| 64   |       60 |          60 |          60 |
-| 128  |       60 |          60 |          57 |
-| 256  |       60 |          60 |          37 |
-| 512  |       60 |          60 |          17 |
-| 1024 |       59 |          57 |           9 |
-| 2048 |       56 |          45 |           4 |
-| 4096 |       31 |          23 |           2 |
-| 8192 |       14 |          11 |           1 |
-
+[![desktop](results/macbook-fps.png)](results/charts.html)
 
 #### Samsung Galaxy S7
 
-|      | HTML CSS | HTML Inline | S Elephants |
-| ---- | -------- | ----------- | ----------- |
-| 64   |       59 |          59 |          37 |
-| 128  |       58 |          58 |          21 |
-| 256  |       57 |          52 |          12 |
-| 512  |       50 |          40 |           6 |
-| 1024 |       40 |          28 |           3 |
-| 2048 |       24 |          15 |           1 |
-| 4096 |        9 |           7 |           0 |
-| 8192 |        4 |           4 |           0 |
-
+[![galaxy](results/galaxy-fps.png)](results/charts.html)
 
 ## Conclusion
 
