@@ -72,7 +72,7 @@ init : (State, Cmd Msg)
 init =
     { open = Nothing
     , impl = Impl_HtmlCss
-    , count = 100
+    , count = 64
     , actions = makeActions 100
     , times = []
     , frameCount = 0
