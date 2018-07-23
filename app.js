@@ -18542,19 +18542,106 @@ var _mdgriffith$stylish_elephants$Element_Region$navigation = _mdgriffith$stylis
 var _mdgriffith$stylish_elephants$Element_Region$aside = _mdgriffith$stylish_elephants$Internal_Model$Describe(_mdgriffith$stylish_elephants$Internal_Model$Complementary);
 var _mdgriffith$stylish_elephants$Element_Region$mainContent = _mdgriffith$stylish_elephants$Internal_Model$Describe(_mdgriffith$stylish_elephants$Internal_Model$Main);
 
+var _elm_lang$virtual_dom$Main$accordionWrapperStyle = {
+	ctor: '::',
+	_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
+	_1: {
+		ctor: '::',
+		_0: _mdgriffith$stylish_elephants$Element$spacing(12),
+		_1: {ctor: '[]'}
+	}
+};
+var _elm_lang$virtual_dom$Main$accordionContentStyle = {
+	ctor: '::',
+	_0: _mdgriffith$stylish_elephants$Element$clip,
+	_1: {
+		ctor: '::',
+		_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
+		_1: {
+			ctor: '::',
+			_0: _mdgriffith$stylish_elephants$Element_Font$family(
+				{
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element_Font$typeface('Arial'),
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element_Font$size(16),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$black),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	}
+};
+var _elm_lang$virtual_dom$Main$accordionHeadingStyle = {
+	ctor: '::',
+	_0: _mdgriffith$stylish_elephants$Element$pointer,
+	_1: {
+		ctor: '::',
+		_0: _mdgriffith$stylish_elephants$Element$padding(8),
+		_1: {
+			ctor: '::',
+			_0: _mdgriffith$stylish_elephants$Element_Font$size(20),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$black),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element_Font$family(
+						{
+							ctor: '::',
+							_0: _mdgriffith$stylish_elephants$Element_Font$typeface('Arial'),
+							_1: {
+								ctor: '::',
+								_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element_Background$color(
+							A3(_elm_lang$core$Color$rgb, 238, 238, 238)),
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
+							_1: {
+								ctor: '::',
+								_0: _mdgriffith$stylish_elephants$Element_Border$color(
+									A3(_elm_lang$core$Color$rgb, 170, 170, 170)),
+								_1: {
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Border$solid,
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element_Border$width(1),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element_Region$heading(4),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
 var _elm_lang$virtual_dom$Main$accordionSE = F3(
 	function (openMsg, isOpen, acc) {
 		return A2(
 			_mdgriffith$stylish_elephants$Element$column,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$spacing(12),
-					_1: {ctor: '[]'}
-				}
-			},
+			_elm_lang$virtual_dom$Main$accordionWrapperStyle,
 			{
 				ctor: '::',
 				_0: A2(
@@ -18562,62 +18649,7 @@ var _elm_lang$virtual_dom$Main$accordionSE = F3(
 					{
 						ctor: '::',
 						_0: _mdgriffith$stylish_elephants$Element_Events$onClick(openMsg),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element$pointer,
-							_1: {
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element$padding(8),
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Font$size(20),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$black),
-										_1: {
-											ctor: '::',
-											_0: _mdgriffith$stylish_elephants$Element_Font$family(
-												{
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element_Font$typeface('Arial'),
-													_1: {
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Background$color(
-													A3(_elm_lang$core$Color$rgb, 238, 238, 238)),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-													_1: {
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element_Border$color(
-															A3(_elm_lang$core$Color$rgb, 170, 170, 170)),
-														_1: {
-															ctor: '::',
-															_0: _mdgriffith$stylish_elephants$Element_Border$solid,
-															_1: {
-																ctor: '::',
-																_0: _mdgriffith$stylish_elephants$Element_Border$width(1),
-																_1: {
-																	ctor: '::',
-																	_0: _mdgriffith$stylish_elephants$Element_Region$heading(4),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
+						_1: _elm_lang$virtual_dom$Main$accordionHeadingStyle
 					},
 					{
 						ctor: '::',
@@ -18628,40 +18660,15 @@ var _elm_lang$virtual_dom$Main$accordionSE = F3(
 					ctor: '::',
 					_0: A2(
 						_mdgriffith$stylish_elephants$Element$paragraph,
-						{
+						isOpen ? {
 							ctor: '::',
-							_0: isOpen ? _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink) : _mdgriffith$stylish_elephants$Element$height(
+							_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
+							_1: _elm_lang$virtual_dom$Main$accordionContentStyle
+						} : {
+							ctor: '::',
+							_0: _mdgriffith$stylish_elephants$Element$height(
 								_mdgriffith$stylish_elephants$Element$px(0)),
-							_1: {
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element$clip,
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Font$family(
-											{
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Font$typeface('Arial'),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: _mdgriffith$stylish_elephants$Element_Font$size(16),
-											_1: {
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$black),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
+							_1: _elm_lang$virtual_dom$Main$accordionContentStyle
 						},
 						{
 							ctor: '::',
