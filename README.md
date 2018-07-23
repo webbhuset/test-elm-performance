@@ -80,7 +80,7 @@ With 1024 Accordions
 If you hit the "Run Test" button the app will call `requestAnimationFrame` 30 times and open an accordion on each frame.
 This way the whole rendering cycle is taken into account.
 
-Here are some results from different devices.
+Here are some results from different devices showing how FPS decreases as the accordion count increases.
 
 #### Desktop i7 4.5Ghz
 
