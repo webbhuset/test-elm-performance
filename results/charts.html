@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>chart created with amCharts | amCharts</title>
+		<meta name="description" content="chart created using amCharts live editor" />
+		
+		<!-- amCharts javascript sources -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		
+
+		<!-- amCharts javascript code -->
+		<script type="text/javascript">
+			AmCharts.makeChart("desktop-fps",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "round",
+							"id": "AmGraph-1",
+							"title": "HTML+CSS",
+							"valueField": "HTML+CSS"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-2",
+							"title": "HTML Inline",
+							"valueField": "HTML Inline"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-3",
+							"labelOffset": -3,
+							"title": "Stylish Elephants",
+							"valueField": "Stylish Elephants"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "FPS"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Desktop i7 4.5Ghz FPS"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "64",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "60",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "128",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "59",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "256",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "41",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "512",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "20",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "1024",
+							"HTML+CSS": "59",
+							"Stylish Elephants": "10",
+							"HTML Inline": "58"
+						},
+						{
+							"category": "2048",
+							"HTML+CSS": "57",
+							"Stylish Elephants": "5",
+							"HTML Inline": "55"
+						},
+						{
+							"category": "4096",
+							"HTML+CSS": "43",
+							"Stylish Elephants": "2",
+							"HTML Inline": "29"
+						},
+						{
+							"category": "8192",
+							"HTML+CSS": "25",
+							"Stylish Elephants": "1",
+							"HTML Inline": "16"
+						}
+					]
+				}
+			);
+			AmCharts.makeChart("macbook-fps",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "round",
+							"id": "AmGraph-1",
+							"title": "HTML+CSS",
+							"valueField": "HTML+CSS"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-2",
+							"title": "HTML Inline",
+							"valueField": "HTML Inline"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-3",
+							"labelOffset": -3,
+							"title": "Stylish Elephants",
+							"valueField": "Stylish Elephants"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "FPS"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Macbook Pro 13\" 2015 FPS"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "64",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "60",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "128",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "57",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "256",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "37",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "512",
+							"HTML+CSS": "60",
+							"Stylish Elephants": "17",
+							"HTML Inline": "60"
+						},
+						{
+							"category": "1024",
+							"HTML+CSS": "59",
+							"Stylish Elephants": "9",
+							"HTML Inline": "57"
+						},
+						{
+							"category": "2048",
+							"HTML+CSS": "56",
+							"Stylish Elephants": "4",
+							"HTML Inline": "45"
+						},
+						{
+							"category": "4096",
+							"HTML+CSS": "31",
+							"Stylish Elephants": "2",
+							"HTML Inline": "23"
+						},
+						{
+							"category": "8192",
+							"HTML+CSS": "14",
+							"Stylish Elephants": "1",
+							"HTML Inline": "11"
+						}
+					]
+				}
+			);
+			AmCharts.makeChart("galaxy-fps",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "round",
+							"id": "AmGraph-1",
+							"title": "HTML+CSS",
+							"valueField": "HTML+CSS"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-2",
+							"title": "HTML Inline",
+							"valueField": "HTML Inline"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-3",
+							"labelOffset": -3,
+							"title": "Stylish Elephants",
+							"valueField": "Stylish Elephants"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "FPS"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Samsung Galaxy S7 FPS"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "64",
+							"HTML+CSS": "59",
+							"Stylish Elephants": "37",
+							"HTML Inline": "59"
+						},
+						{
+							"category": "128",
+							"HTML+CSS": "58",
+							"Stylish Elephants": "21",
+							"HTML Inline": "58"
+						},
+						{
+							"category": "256",
+							"HTML+CSS": "57",
+							"Stylish Elephants": "12",
+							"HTML Inline": "52"
+						},
+						{
+							"category": "512",
+							"HTML+CSS": "50",
+							"Stylish Elephants": "6",
+							"HTML Inline": "40"
+						},
+						{
+							"category": "1024",
+							"HTML+CSS": "40",
+							"Stylish Elephants": "3",
+							"HTML Inline": "28"
+						},
+						{
+							"category": "2048",
+							"HTML+CSS": "24",
+							"Stylish Elephants": "1",
+							"HTML Inline": "15"
+						},
+						{
+							"category": "4096",
+							"HTML+CSS": "9",
+							"Stylish Elephants": "0",
+							"HTML Inline": "7"
+						},
+						{
+							"category": "8192",
+							"HTML+CSS": "4",
+							"Stylish Elephants": "0",
+							"HTML Inline": "4"
+						}
+					]
+				}
+			);
+			AmCharts.makeChart("breakdown-part",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": " [[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-1",
+							"title": "View",
+							"type": "column",
+							"valueField": "View"
+						},
+						{
+							"balloonText": " [[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-2",
+							"title": "Diff",
+							"type": "column",
+							"valueField": "Diff"
+						},
+						{
+							"balloonText": " [[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-3",
+							"title": "Apply",
+							"type": "column",
+							"valueField": "Apply"
+						},
+						{
+							"balloonText": " [[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-4",
+							"title": "Layout",
+							"type": "column",
+							"valueField": "Layout"
+						},
+						{
+							"balloonText": " [[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-5",
+							"title": "Paint",
+							"type": "column",
+							"valueField": "Paint"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"stackType": "regular",
+							"title": "Time (ms)"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Render Breakdown, Small change"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "HTML+CSS",
+							"View": "27",
+							"Diff": "7",
+							"Apply": "1",
+							"Layout": "45",
+							"Paint": "3.5"
+						},
+						{
+							"category": "HTML Inline Style",
+							"View": "33",
+							"Diff": "10",
+							"Apply": "1",
+							"Layout": "45",
+							"Paint": "3.5"
+						},
+						{
+							"category": "Stylish Elephants",
+							"View": "670",
+							"Diff": "31",
+							"Apply": "1",
+							"Layout": "150",
+							"Paint": "25"
+						}
+					]
+				}
+			);
+			AmCharts.makeChart("breakdown-full",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-1",
+							"title": "View",
+							"type": "column",
+							"valueField": "View"
+						},
+						{
+							"balloonText": "[[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-2",
+							"title": "Diff",
+							"type": "column",
+							"valueField": "Diff"
+						},
+						{
+							"balloonText": "[[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-3",
+							"title": "Apply",
+							"type": "column",
+							"valueField": "Apply"
+						},
+						{
+							"balloonText": "[[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-4",
+							"title": "Layout",
+							"type": "column",
+							"valueField": "Layout"
+						},
+						{
+							"balloonText": "[[title]]: [[value]]ms",
+							"fillAlphas": 1,
+							"id": "AmGraph-5",
+							"title": "Paint",
+							"type": "column",
+							"valueField": "Paint"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"stackType": "regular",
+							"title": "Time (ms)"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Render Breakdown, Full Update"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "HTML + CSS",
+							"View": "54",
+							"Diff": "0.1",
+							"Apply": "188",
+							"Layout": "574",
+							"Paint": "16"
+						},
+						{
+							"category": "HTML Inline",
+							"View": "67",
+							"Diff": "0.1",
+							"Apply": "382",
+							"Layout": "605",
+							"Paint": "18"
+						},
+						{
+							"category": "Stylish Elephants",
+							"View": "963",
+							"Diff": "1",
+							"Apply": "220",
+							"Layout": "1580",
+							"Paint": "63"
+						}
+					]
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<div id="desktop-fps" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+		<div id="macbook-fps" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+		<div id="galaxy-fps" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+		<div id="breakdown-part" style="width: 100%; height: 800px; background-color: #FFFFFF;" ></div>
+		<div id="breakdown-full" style="width: 100%; height: 800px; background-color: #FFFFFF;" ></div>
+	</body>
+</html>
