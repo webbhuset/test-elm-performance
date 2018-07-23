@@ -266,7 +266,7 @@ renderAccordions state =
         Impl_SE ->
             state.actions
                 |> List.map (\( idx, openMsg ) -> accordionSE openMsg (Just idx == state.open) accordion)
-                |> Element.column [ Element.padding 32, Element.spacing 16 ]
+                |> Element.column [ Element.padding 32, Element.spacing 16, Element.width Element.fill ]
                 |> Element.layout []
                 |> Tuple.pair "style-elements"
 
