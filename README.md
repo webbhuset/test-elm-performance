@@ -1,5 +1,5 @@
 
-You can open the [test here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html) and try it on your device.
+You can open the [test app here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html) and try it on your device. Just choose your prefered settings and hit "Run Test".
 
 ## What is this?
 
@@ -20,19 +20,11 @@ The rendering times are printed to the console using [console.time](https://deve
 2. **diff**: The time it takes to compare the generated tree with previous VDOM tree and generating a patch (the Reconciliation algorithm).
 3. **apply**: This is the time it takes to apply the changes to the "real" DOM.
 
-Two scenarios can be compared in this app:
-
-1. A small portion of the DOM is changed. (Open / Close the accordion)
-2. The whole page is re-rendered. (Change the Implementation)
-
 ## Some Test Results
 
 ### Small changes to the DOM
 
-For example when you toggle someting on the page. In this case opening an accordion.
-
-* 1000 Accordions on an slow desktop computer.
-* Average values from opening and closing the first accordion 10 times.
+For example when you toggle someting on the page. In this case I opened the first accordion.
 
 |             | HTML-CSS | HTML Inline |  SE   |
 | ----------- | -------- | ----------- | ----- |
@@ -41,24 +33,17 @@ For example when you toggle someting on the page. In this case opening an accord
 | Apply       |    < 1.0 |       < 1.0 | < 1.0 |
 | Node Count* |     3040 |        3040 |  6043 |
 
- * DOM Node Count using `document.querySelectorAll('*').length`
+ *DOM Node Count using `document.querySelectorAll('*').length`
 
-Here you can se that the view function of the program is the largest part of rendering.
+* Here you can se that the view function of the program is the largest part of rendering.
+* Even though the html-inline approach has the same html elements as html-css, it takes more time on both *view* and *diff* since it also has to handle all the style attributes.
+* Stylish Elephants does a lot more work for you than just generating a Virtual Dom tree, so this comparisation is quite unfair. But on the other hand, this is a performance test.
+* Using [Html.Lazy](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html-Lazy) (or Element.Lazy) will reduce the *view* and *diff* step.
+* Since just one element has to be changed, the apply step is below 1ms and does not have any practical impact on the performance.
 
-Even though the html-inline approach has the same html elements as html-css, it takes more time on both *view* and *diff* since it also has to handle all the style attributes.
+### Large change to the DOM
 
-Stylish Elephants does a lot more work for you than just generating a Virtual Dom tree, so this comparisation is quite unfair. But on the other hand, this is a performance test.
-
-Using [Html.Lazy](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html-Lazy) (or Element.Lazy) will reduce the *view* and *diff* step.
-
-Since just one element has to be changed, the apply step is below 1ms and does not have any practical impact on the performance.
-
-### Replacing a lot
-
-This could be when switching page in your application.
-
-* 1000 Accordions on an slow desktop computer.
-* Switching between the three implementations.
+This could be when switching page in your application. I switched between implementations to emulate this.
 
 |             | HTML-CSS | HTML Inline |  SE   |
 | ----------- | -------- | ----------- | ----- |
@@ -67,22 +52,19 @@ This could be when switching page in your application.
 | Apply       |      130 |         270 |   170 |
 | Node Count* |     3040 |        3040 |  6043 |
 
-The same amount of Virtual DOM is generated in this test so the time on the view function is more or less the same.
-
-Since `Html.Keyed` is used around the accordion wrapper the diffing will bail out early and just replace the whole thing.
-This is why you see much lower times on the diffing step compared to the previous example.
-
-Applying the patch to the "real" DOM takes more time here since many nodes has to be deleted and created.
-You can see that the html-inline implementation takes more time to apply since it also has to handle a lot of attributes on each node.
+* The same amount of Virtual DOM is generated in this test so the time on the view function is more or less the same as in the previous test.
+* Since `Html.Keyed` is used around the accordion wrapper the diffing will bail out early and just replace the whole thing. This is why you see much lower times on the diffing step compared to the previous example.
+* Applying the patch to the "real" DOM takes more time here since many nodes has to be deleted and created.
+* You can see that the html-inline implementation takes more time to apply since it also has to handle a lot of attributes on each node.
 
 ### Layout and Paint
 
 When a browser renders the page there is a lot more happening than just diffing and applying virtual DOM.
 A fair amount of time is also spent on calculating layout and painting. Garbage Collection cycles can also affect the rendering performance.
 
-In this test, I start with the first accordion open and measure the time it takes to finnish the complete rendering process.
+In this test I open first accordion and measure the time of each part in the rendering process.
 
-With 1000 Accordions
+With 1024 Accordions
 
 |             | HTML-CSS | HTML Inline |  SE   |
 | ----------- | -------- | ----------- | ----- |
@@ -91,19 +73,6 @@ With 1000 Accordions
 | Apply       |    < 1.0 |       < 1.0 | < 1.0 |
 | Layout      |       45 |          45 |   150 |
 | Paint       |      3.5 |         3.5 |    25 |
-| Node Count* |       3k |          3k |    6k |
-
-With 5000 Accordions
-
-|             | HTML-CSS | HTML Inline |  SE   |
-| ----------- | -------- | ----------- | ----- |
-| View        |       61 |         138 |  2590 |
-| Diff        |       25 |          38 |   148 |
-| Apply       |    < 1.0 |         1.9 |   1.5 |
-| Layout      |      230 |         235 |   720 |
-| Paint       |      7.5 |         7.5 |    98 |
-| Node Count* |      15k |         15k |   30k |
-
 
 
 ### Animation Frame FPS vs Size
