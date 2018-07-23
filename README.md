@@ -1,7 +1,7 @@
 
 You can open the [test here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html) and try it on your device.
 
-## Why?
+## What is this?
 
 This is a simple, non-scientific test of the render performance of the Elm Virtual DOM. I
 created this to get a better understanding on how the Virtual DOM works and what affects
@@ -91,7 +91,7 @@ With 1000 Accordions
 | Apply       |    < 1.0 |       < 1.0 | < 1.0 |
 | Layout      |       45 |          45 |   150 |
 | Paint       |      3.5 |         3.5 |    25 |
-| Node Count* |     3040 |        3040 |  6043 |
+| Node Count* |       3k |          3k |    6k |
 
 With 5000 Accordions
 
@@ -103,6 +103,56 @@ With 5000 Accordions
 | Layout      |      230 |         235 |   720 |
 | Paint       |      7.5 |         7.5 |    98 |
 | Node Count* |      15k |         15k |   30k |
+
+
+
+### Animation Frame FPS vs Size
+
+If you hit the "Run Test" button the app will call `requestAnimationFrame` 30 times and open an accordion on each frame.
+This way the whole rendering cycle is taken into account.
+
+Here are some results from different devices.
+
+#### Desktop i7 4.5Ghz
+
+|      | HTML CSS | HTML Inline | S Elephants |
+| ---- | -------- | ----------- | ----------- |
+| 64   |       60 |          60 |          60 |
+| 128  |       60 |          60 |          59 |
+| 256  |       60 |          60 |          41 |
+| 512  |       60 |          60 |          20 |
+| 1024 |       59 |          58 |          10 |
+| 2048 |       57 |          55 |           5 |
+| 4096 |       43 |          29 |           2 |
+| 8192 |       25 |          16 |           1 |
+
+
+#### Macbook Pro 13" (2015)
+
+|      | HTML CSS | HTML Inline | S Elephants |
+| ---- | -------- | ----------- | ----------- |
+| 64   |       60 |          60 |          60 |
+| 128  |       60 |          60 |          57 |
+| 256  |       60 |          60 |          37 |
+| 512  |       60 |          60 |          17 |
+| 1024 |       59 |          57 |           9 |
+| 2048 |       56 |          45 |           4 |
+| 4096 |       31 |          23 |           2 |
+| 8192 |       14 |          11 |           1 |
+
+
+#### Samsung Galaxy S7
+
+|      | HTML CSS | HTML Inline | S Elephants |
+| ---- | -------- | ----------- | ----------- |
+| 64   |       59 |          59 |          37 |
+| 128  |       58 |          58 |          21 |
+| 256  |       57 |          52 |          12 |
+| 512  |       50 |          40 |           6 |
+| 1024 |       40 |          28 |           3 |
+| 2048 |       24 |          15 |           1 |
+| 4096 |        9 |           7 |           0 |
+| 8192 |        4 |           4 |           0 |
 
 
 ## Conclusion

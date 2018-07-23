@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>chart created with amCharts | amCharts</title>
+		<meta name="description" content="chart created using amCharts live editor" />
+		
+		<!-- amCharts javascript sources -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		
+
+		<!-- amCharts javascript code -->
+		<script type="text/javascript">
+			AmCharts.makeChart("chartdiv",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "round",
+							"id": "AmGraph-1",
+							"title": "HTML+CSS",
+							"valueField": "HTML+CSS"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-2",
+							"title": "HTML Inline",
+							"valueField": "HTML Inline"
+						},
+						{
+							"balloonText": "[[title]] at [[category]]: [[value]] FPS",
+							"bullet": "square",
+							"id": "AmGraph-3",
+							"labelOffset": -3,
+							"title": "Stylish Elephants",
+							"valueField": "Stylish Elephants"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "FPS"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Samsung Galaxy S7"
+						}
+					],
+					"dataProvider": [
+						{
+							"category": "64",
+							"HTML+CSS": "59",
+							"Stylish Elephants": "37",
+							"HTML Inline": "59"
+						},
+						{
+							"category": "128",
+							"HTML+CSS": "58",
+							"Stylish Elephants": "21",
+							"HTML Inline": "58"
+						},
+						{
+							"category": "256",
+							"HTML+CSS": "57",
+							"Stylish Elephants": "12",
+							"HTML Inline": "52"
+						},
+						{
+							"category": "512",
+							"HTML+CSS": "50",
+							"Stylish Elephants": "6",
+							"HTML Inline": "40"
+						},
+						{
+							"category": "1024",
+							"HTML+CSS": "40",
+							"Stylish Elephants": "3",
+							"HTML Inline": "28"
+						},
+						{
+							"category": "2048",
+							"HTML+CSS": "24",
+							"Stylish Elephants": "1",
+							"HTML Inline": "15"
+						},
+						{
+							"category": "4096",
+							"HTML+CSS": "9",
+							"Stylish Elephants": "0",
+							"HTML Inline": "7"
+						},
+						{
+							"category": "8192",
+							"HTML+CSS": "4",
+							"Stylish Elephants": "0",
+							"HTML Inline": "4"
+						}
+					]
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+	</body>
+</html>
