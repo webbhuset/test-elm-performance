@@ -2,14 +2,15 @@
     "version": "1.0.0",
     "summary": "helpful summary of your project, less than 80 characters",
     "repository": "https://github.com/elm-lang/virtual-dom.git",
-    "native-modules": true,
     "license": "BSD3",
     "source-directories": [
         "src",
         "virtual-dom"
     ],
     "exposed-modules": [],
+    "native-modules": true,
     "dependencies": {
+        "elm-lang/animation-frame": "1.0.1 <= v < 2.0.0",
         "elm-lang/core": "5.1.1 <= v < 6.0.0",
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
         "mdgriffith/stylish-elephants": "6.0.2 <= v < 7.0.0"

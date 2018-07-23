@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Time exposing (Time)
+import AnimationFrame
 import Html exposing (Html)
 import Html.Keyed as Keyed
 import Html.Events as Html
@@ -19,6 +21,9 @@ type alias State =
     , impl : Impl
     , count : Int
     , actions : List (Int, Msg)
+    , times : List Time
+    , frameCount : Int
+    , isRunning : Bool
     }
 
 
@@ -35,6 +40,10 @@ accordion =
     }
 
 
+testCount : Int
+testCount = 30
+
+
 type Impl
     = Impl_HtmlCss
     | Impl_HtmlInline
@@ -43,34 +52,42 @@ type Impl
 
 type Msg
     = Open Int
+    | StartTest
+    | TickTest Time
     | SetImpl Impl
     | SetCount Int
 
 
+main : Program Never State Msg
 main =
-    Html.beginnerProgram
-        { model = init
+    Html.program
+        { init = init
         , update = update
         , view = view
+        , subscriptions = subscriptions
         }
 
 
-init : State
+init : (State, Cmd Msg)
 init =
     { open = Nothing
     , impl = Impl_HtmlCss
     , count = 100
     , actions = makeActions 100
+    , times = []
+    , frameCount = 0
+    , isRunning = False
     }
+        |> noCmd
 
 
 makeActions : Int -> List (Int, Msg)
 makeActions count =
-    List.range 1 count
+    List.range 0 (count - 1)
         |> List.map (\i -> (i, Open i))
 
 
-update : Msg -> State -> State
+update : Msg -> State -> (State, Cmd Msg)
 update msg state =
     case msg of
         Open idx ->
@@ -83,22 +100,60 @@ update msg state =
                         Nothing ->
                             Just idx
             }
+                |> noCmd
 
         SetImpl impl ->
             { state | impl = impl }
+                |> noCmd
 
         SetCount count ->
             { state
                 | count = count
                 , actions = makeActions count
             }
+                |> noCmd
 
+        StartTest ->
+            ( { state
+                | open = Nothing
+                , times = []
+                , isRunning = True
+                , frameCount = 0
+              }
+            , Cmd.none
+            )
+
+        TickTest diff ->
+            { state
+                | times = diff :: state.times
+                , frameCount = state.frameCount + 1
+                , isRunning = state.frameCount < testCount
+                , open = Just (state.frameCount % state.count)
+            }
+                |> noCmd
+
+
+subscriptions : State -> Sub Msg
+subscriptions state =
+    if state.isRunning then
+        AnimationFrame.diffs TickTest
+    else
+        Sub.none
+
+
+noCmd : State -> (State, Cmd Msg)
+noCmd s =
+    (s, Cmd.none)
+
+
+-- VIew
 
 view : State -> Html Msg
 view state =
     Html.div
         [ Html.class "page" ]
         [ Html.lazy heading 1
+        , renderSummary state
         , Html.h2 [] [ Html.text <| "Implementation: " ++ (implLabel state.impl) ]
         , Html.p [] [ Html.text <| "Number of accordions: " ++ (toString state.count) ]
         , Keyed.node "div" [] [ renderAccordions state ]
@@ -141,8 +196,33 @@ heading _ =
             , Html.button [ Html.onClick (SetCount 5000) ] [ Html.text "5 000" ]
             , Html.button [ Html.onClick (SetCount 10000) ] [ Html.text "10 000" ]
             ]
+        , Html.p []
+            [ Html.text <| "This will render " ++ (toString testCount) ++ " frames and measure the time between each animation frame. "
+            , Html.text <| "On each frame the next accordion is opened."
+            ]
+        , Html.button [ Html.onClick StartTest ] [ Html.text "Run Test" ]
         , Html.hr [] []
         ]
+
+
+renderSummary : State -> Html Msg
+renderSummary state =
+    if state.isRunning then
+        Html.div [] [ Html.text "Wait for test to complete" ]
+    else if List.length state.times == 0 then
+        Html.div [] [ Html.text "Hit start to run test" ]
+    else
+        let
+            testSum =
+                List.sum state.times
+            avg =
+                testSum / (toFloat <| List.length state.times)
+        in
+        Html.div []
+            [ Html.text <| "Total time: " ++ (toString <| round testSum) ++ "ms | "
+            , Html.text <| "Avg time / frame: " ++ (toString <| round avg) ++ "ms | "
+            , Html.text <| "Avg frame rate: " ++ (toString <| round (1000 / avg)) ++ " frames / sec"
+            ]
 
 
 implLabel : Impl -> String
