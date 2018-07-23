@@ -91,7 +91,7 @@ With 1000 Accordions
 | Apply       |    < 1.0 |       < 1.0 | < 1.0 |
 | Layout      |       45 |          45 |   150 |
 | Paint       |      3.5 |         3.5 |    25 |
-| Node Count* |      15k |         15k |   30k |
+| Node Count* |     3040 |        3040 |  6043 |
 
 With 5000 Accordions
 
