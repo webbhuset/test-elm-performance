@@ -62,7 +62,7 @@ This could be when switching page in your application. I switched between implem
 When a browser renders the page there is a lot more happening than just diffing and applying virtual DOM.
 A fair amount of time is also spent on calculating layout and painting. Garbage Collection cycles can also affect the rendering performance.
 
-In this test I open first accordion and measure the time of each part in the rendering process.
+In this test I opened first accordion and measured the time of each part in the rendering process.
 
 With 1024 Accordions
 
