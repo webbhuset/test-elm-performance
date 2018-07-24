@@ -1,26 +1,26 @@
 module Main exposing (..)
 
-import Time exposing (Time)
 import AnimationFrame
-import Html exposing (Html)
-import Html.Keyed as Keyed
-import Html.Events as Html
-import Html.Attributes as Html
-import Html.Lazy as Html
 import Color
 import Element exposing (Element)
-import Element.Events as Element
 import Element.Background as Bg
 import Element.Border as Border
+import Element.Events as Element
 import Element.Font as Font
 import Element.Region as Region
+import Html exposing (Html)
+import Html.Attributes as Html
+import Html.Events as Html
+import Html.Keyed as Keyed
+import Html.Lazy as Html
+import Time exposing (Time)
 
 
 type alias State =
     { open : Maybe Int
     , impl : Impl
     , count : Int
-    , actions : List (Int, Msg)
+    , actions : List ( Int, Msg )
     , times : List Time
     , frameCount : Int
     , isRunning : Bool
@@ -41,7 +41,8 @@ accordion =
 
 
 testCount : Int
-testCount = 30
+testCount =
+    30
 
 
 type Impl
@@ -68,7 +69,7 @@ main =
         }
 
 
-init : (State, Cmd Msg)
+init : ( State, Cmd Msg )
 init =
     { open = Nothing
     , impl = Impl_HtmlCss
@@ -81,13 +82,13 @@ init =
         |> noCmd
 
 
-makeActions : Int -> List (Int, Msg)
+makeActions : Int -> List ( Int, Msg )
 makeActions count =
     List.range 0 (count - 1)
-        |> List.map (\i -> (i, Open i))
+        |> List.map (\i -> ( i, Open i ))
 
 
-update : Msg -> State -> (State, Cmd Msg)
+update : Msg -> State -> ( State, Cmd Msg )
 update msg state =
     case msg of
         Open idx ->
@@ -95,7 +96,10 @@ update msg state =
                 | open =
                     case state.open of
                         Just i ->
-                            if i == idx then Nothing else Just idx
+                            if i == idx then
+                                Nothing
+                            else
+                                Just idx
 
                         Nothing ->
                             Just idx
@@ -141,12 +145,14 @@ subscriptions state =
         Sub.none
 
 
-noCmd : State -> (State, Cmd Msg)
+noCmd : State -> ( State, Cmd Msg )
 noCmd s =
-    (s, Cmd.none)
+    ( s, Cmd.none )
+
 
 
 -- VIew
+
 
 view : State -> Html Msg
 view state =
@@ -154,8 +160,8 @@ view state =
         [ Html.class "page" ]
         [ Html.lazy heading 1
         , renderSummary state
-        , Html.h2 [] [ Html.text <| "Implementation: " ++ (implLabel state.impl) ]
-        , Html.p [] [ Html.text <| "Number of accordions: " ++ (toString state.count) ]
+        , Html.h2 [] [ Html.text <| "Implementation: " ++ implLabel state.impl ]
+        , Html.p [] [ Html.text <| "Number of accordions: " ++ toString state.count ]
         , Keyed.node "div" [] [ renderAccordions state ]
         , Html.node "style" [] [ Html.text css ]
         ]
@@ -182,9 +188,9 @@ heading _ =
             ]
         , Html.p [] [ Html.text "Use implementation:" ]
         , Html.div [ Html.class "header-button-row" ]
-            [ Html.button [ Html.onClick (SetImpl Impl_HtmlCss ) ] [ Html.text "HTML / CSS" ]
-            , Html.button [ Html.onClick (SetImpl Impl_HtmlInline ) ] [ Html.text "HTML Inline" ]
-            , Html.button [ Html.onClick (SetImpl Impl_SE ) ] [ Html.text "Stylish Elephants" ]
+            [ Html.button [ Html.onClick (SetImpl Impl_HtmlCss) ] [ Html.text "HTML / CSS" ]
+            , Html.button [ Html.onClick (SetImpl Impl_HtmlInline) ] [ Html.text "HTML Inline" ]
+            , Html.button [ Html.onClick (SetImpl Impl_SE) ] [ Html.text "Stylish Elephants" ]
             ]
         , Html.p [] [ Html.text "Repeat the accordion this many times:" ]
         , Html.div [ Html.class "header-button-row" ]
@@ -198,7 +204,7 @@ heading _ =
             , Html.button [ Html.onClick (SetCount 8192) ] [ Html.text "8192" ]
             ]
         , Html.p []
-            [ Html.text <| "This will render " ++ (toString testCount) ++ " frames and measure the time between each animation frame. "
+            [ Html.text <| "This will render " ++ toString testCount ++ " frames and measure the time between each animation frame. "
             , Html.text <| "On each frame the next accordion is opened."
             ]
         , Html.button [ Html.onClick StartTest ] [ Html.text "Run Test" ]
@@ -216,6 +222,7 @@ renderSummary state =
         let
             testSum =
                 List.sum state.times
+
             avg =
                 testSum / (toFloat <| List.length state.times)
         in
@@ -239,18 +246,18 @@ implLabel impl =
             "Stylish Elephants (6.0.2)"
 
 
-renderAccordions : State -> (String, Html Msg)
+renderAccordions : State -> ( String, Html Msg )
 renderAccordions state =
     case state.impl of
         Impl_HtmlCss ->
             state.actions
-                |> List.map (\(idx, openMsg) -> accordionHtmlCss openMsg (Just idx == state.open) accordion)
+                |> List.map (\( idx, openMsg ) -> accordionHtmlCss openMsg (Just idx == state.open) accordion)
                 |> Html.div [ Html.class "wrapper" ]
                 |> (,) "html-css"
 
         Impl_HtmlInline ->
             state.actions
-                |> List.map (\(idx, openMsg) -> accordionHtmlInline openMsg (Just idx == state.open) accordion)
+                |> List.map (\( idx, openMsg ) -> accordionHtmlInline openMsg (Just idx == state.open) accordion)
                 |> Html.div
                     [ Html.style
                         [ ( "padding", "32px" )
@@ -260,13 +267,15 @@ renderAccordions state =
 
         Impl_SE ->
             state.actions
-                |> List.map (\(idx, openMsg) -> accordionSE openMsg (Just idx == state.open) accordion)
+                |> List.map (\( idx, openMsg ) -> accordionSE openMsg (Just idx == state.open) accordion)
                 |> Element.column [ Element.padding 32, Element.spacing 16 ]
                 |> Element.layout []
                 |> (,) "style-elements"
 
 
+
 -- HTML / CSS
+
 
 accordionHtmlCss : msg -> Bool -> Accordion -> Html msg
 accordionHtmlCss openMsg isOpen acc =
@@ -281,12 +290,13 @@ accordionHtmlCss openMsg isOpen acc =
         , Html.p
             [ Html.class "content"
             , Html.classList
-                [ ("open", isOpen )
+                [ ( "open", isOpen )
                 ]
             ]
             [ Html.text acc.content
             ]
         ]
+
 
 css : String
 css =
@@ -332,7 +342,10 @@ css =
 }
 """
 
+
+
 -- HTML with inline style
+
 
 accordionHtmlInline : msg -> Bool -> Accordion -> Html msg
 accordionHtmlInline openMsg isOpen acc =
@@ -356,7 +369,10 @@ accordionHtmlInline openMsg isOpen acc =
             ]
         , Html.p
             [ Html.style
-                [ if isOpen then ( "height", "auto" ) else ( "height", "0" )
+                [ if isOpen then
+                    ( "height", "auto" )
+                  else
+                    ( "height", "0" )
                 , ( "overflow", "hidden" )
                 , ( "font-family", "Arial, sans-serif" )
                 , ( "margin", "12px 0" )
@@ -368,23 +384,25 @@ accordionHtmlInline openMsg isOpen acc =
         ]
 
 
+
 -- Stylish Elephants
+
 
 accordionSE : msg -> Bool -> Accordion -> Element msg
 accordionSE openMsg isOpen acc =
     Element.column
         accordionWrapperStyle
         [ Element.paragraph
-            ( Element.onClick openMsg
-            :: accordionHeadingStyle
+            (Element.onClick openMsg
+                :: accordionHeadingStyle
             )
             [ Element.text acc.heading
             ]
         , Element.paragraph
-            ( if isOpen then
-                (Element.height Element.shrink) :: accordionContentStyle
-              else
-                (Element.height (Element.px 0)) :: accordionContentStyle
+            (if isOpen then
+                Element.height Element.shrink :: accordionContentStyle
+             else
+                Element.height (Element.px 0) :: accordionContentStyle
             )
             [ Element.text acc.content
             ]
@@ -396,7 +414,7 @@ accordionHeadingStyle =
     [ Element.pointer
     , Element.padding 8
     , Font.size 20
-    , Font.color (Color.black)
+    , Font.color Color.black
     , Font.family [ Font.typeface "Arial", Font.sansSerif ]
     , Bg.color (Color.rgb 0xEE 0xEE 0xEE)
     , Element.width Element.fill
@@ -413,7 +431,7 @@ accordionContentStyle =
     , Element.width Element.fill
     , Font.family [ Font.typeface "Arial", Font.sansSerif ]
     , Font.size 16
-    , Font.color (Color.black)
+    , Font.color Color.black
     ]
 
 
