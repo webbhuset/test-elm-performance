@@ -29,10 +29,10 @@ For example when you toggle someting on the page. In this case I opened the firs
 
 |             | HTML-CSS | HTML Inline |  SE   | elm-css |
 | ----------- | -------- | ----------- | ----- | ------- |
-| View        |      7.2 |        18.1 |   400 |         |
-| Diff        |      4.3 |        10.8 |    27 |         |
-| Apply       |    < 1.0 |       < 1.0 | < 1.0 |         |
-| Node Count* |     3040 |        3040 |  6043 |         |
+| View        |      7.2 |        18.1 |   400 |     730 |
+| Diff        |      4.3 |        10.8 |    27 |     6.5 |
+| Apply       |    < 1.0 |       < 1.0 | < 1.0 |   < 1.0 |
+| Node Count* |     3120 |        3120 |  6195 |    3121 |
 
  *DOM Node Count using `document.querySelectorAll('*').length`
 
@@ -48,10 +48,10 @@ This could be when switching page in your application. I switched between implem
 
 |             | HTML-CSS | HTML Inline |  SE   | elm-css |
 | ----------- | -------- | ----------- | ----- | ------- |
-| View        |      6.5 |        22.7 |   400 |         |
-| Diff        |      1.2 |         0.8 |   0.5 |         |
-| Apply       |      130 |         270 |   170 |         |
-| Node Count* |     3040 |        3040 |  6043 |         |
+| View        |      6.5 |        22.7 |   400 |     750 |
+| Diff        |      1.2 |         0.8 |   0.5 |     0.1 |
+| Apply       |      130 |         270 |   170 |     125 |
+
 
 * The same amount of Virtual DOM is generated in this test so the time on the view function is more or less the same as in the previous test.
 * Since `Html.Keyed` is used around the accordion wrapper the diffing will bail out early and just replace the whole thing. This is why you see much lower times on the diffing step compared to the previous example.
@@ -69,11 +69,11 @@ With 1024 Accordions
 
 |             | HTML-CSS | HTML Inline |  SE   | elm-css |
 | ----------- | -------- | ----------- | ----- | ------- |
-| View        |       27 |          33 |   670 |         |
-| Diff        |        7 |          10 |    31 |         |
-| Apply       |    < 1.0 |       < 1.0 | < 1.0 |         |
-| Layout      |       45 |          45 |   150 |         |
-| Paint       |      3.5 |         3.5 |    25 |         |
+| View        |       27 |          33 |   670 |     800 |
+| Diff        |        7 |          10 |    31 |     7.5 |
+| Apply       |    < 1.0 |       < 1.0 | < 1.0 |   < 1.0 |
+| Layout      |       45 |          45 |   150 |      95 |
+| Paint       |      3.5 |         3.5 |    25 |     5.9 |
 
 
 ### Animation Frame FPS vs Size
