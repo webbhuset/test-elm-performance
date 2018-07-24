@@ -250,7 +250,7 @@ implLabel impl =
             "HTML with inline style"
 
         Impl_SE ->
-            "Stylish Elephants (6.0.2)"
+            "Stylish Elephants (7.0.3)"
 
         Impl_ElmCss ->
             "elm-css (15.0.0)"
