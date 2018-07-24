@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Browser.Events
+import Css
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
@@ -13,6 +14,9 @@ import Html.Attributes as Html
 import Html.Events as Html
 import Html.Keyed as Keyed
 import Html.Lazy as Html
+import Html.Styled as Styled
+import Html.Styled.Attributes as StyledAttrs
+import Html.Styled.Events as StyledEvents
 import Time
 
 
@@ -49,6 +53,7 @@ type Impl
     = Impl_HtmlCss
     | Impl_HtmlInline
     | Impl_SE
+    | Impl_ElmCss
 
 
 type Msg
@@ -176,6 +181,7 @@ heading _ =
                 [ Html.li [] [ Html.text "HTML with CSS classes (only CSS classes handled by VDOM)" ]
                 , Html.li [] [ Html.text "HTML with inline style (all style is handled by VDOM)" ]
                 , Html.li [] [ Html.text "Style Elements (stylish elephants)" ]
+                , Html.li [] [ Html.text "elm-css (rtfeldman/elm-css with inline styles)" ]
                 ]
             , Html.text "The rendering times are logged to the console and performance timeline (Chrome)."
             , Html.br [] []
@@ -191,6 +197,7 @@ heading _ =
             [ Html.button [ Html.onClick (SetImpl Impl_HtmlCss) ] [ Html.text "HTML / CSS" ]
             , Html.button [ Html.onClick (SetImpl Impl_HtmlInline) ] [ Html.text "HTML Inline" ]
             , Html.button [ Html.onClick (SetImpl Impl_SE) ] [ Html.text "Stylish Elephants" ]
+            , Html.button [ Html.onClick (SetImpl Impl_ElmCss) ] [ Html.text "elm-css" ]
             ]
         , Html.p [] [ Html.text "Repeat the accordion this many times:" ]
         , Html.div [ Html.class "header-button-row" ]
@@ -245,6 +252,9 @@ implLabel impl =
         Impl_SE ->
             "Stylish Elephants (6.0.2)"
 
+        Impl_ElmCss ->
+            "elm-css (15.0.0)"
+
 
 renderAccordions : State -> ( String, Html Msg )
 renderAccordions state =
@@ -269,6 +279,17 @@ renderAccordions state =
                 |> Element.column [ Element.padding 32, Element.spacing 16, Element.width Element.fill ]
                 |> Element.layout []
                 |> Tuple.pair "style-elements"
+
+        Impl_ElmCss ->
+            state.actions
+                |> List.map (\( idx, openMsg ) -> accordionElmCss openMsg (Just idx == state.open) accordion)
+                |> Styled.div
+                    [ StyledAttrs.css
+                        [ Css.padding (Css.px 32)
+                        ]
+                    ]
+                |> Styled.toUnstyled
+                |> Tuple.pair "elm-css"
 
 
 
@@ -430,4 +451,45 @@ accordionSE openMsg isOpen acc =
                 ]
           else
             Element.none
+        ]
+
+
+
+-- elm-css
+
+
+accordionElmCss : msg -> Bool -> Accordion -> Styled.Html msg
+accordionElmCss openMsg isOpen acc =
+    Styled.div
+        []
+        [ Styled.h4
+            [ StyledEvents.onClick openMsg
+            , StyledAttrs.css
+                [ Css.margin Css.zero
+                , Css.cursor Css.pointer
+                , Css.fontFamilies [ "Arial", .value Css.sansSerif ]
+                , Css.backgroundColor (Css.hex "eee")
+                , Css.padding (Css.px 8)
+                , Css.fontWeight (Css.int 400)
+                , Css.fontSize (Css.px 20)
+                , Css.border3 (Css.px 1) Css.solid (Css.hex "aaa")
+                , Css.lineHeight (Css.px 20)
+                ]
+            ]
+            [ Styled.text acc.heading
+            ]
+        , Styled.p
+            [ StyledAttrs.css
+                [ if isOpen then
+                    Css.height Css.auto
+                  else
+                    Css.height Css.zero
+                , Css.overflow Css.hidden
+                , Css.fontFamilies [ "Arial", .value Css.sansSerif ]
+                , Css.margin2 (Css.px 12) Css.zero
+                , Css.lineHeight (Css.px 21)
+                ]
+            ]
+            [ Styled.text acc.content
+            ]
         ]

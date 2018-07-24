@@ -1,7 +1,11 @@
 {
     "elm-lang/animation-frame": "1.0.1",
     "elm-lang/virtual-dom": "2.0.4",
+    "rtfeldman/elm-css-util": "1.0.2",
     "elm-lang/html": "2.0.0",
+    "rtfeldman/elm-css": "14.0.0",
+    "rtfeldman/hex": "1.0.0",
     "mdgriffith/stylish-elephants": "6.0.2",
+    "Skinney/murmur3": "2.0.6",
     "elm-lang/core": "5.1.1"
 }
