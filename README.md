@@ -85,11 +85,11 @@ Here are some results from different devices showing how FPS decreases as the ac
 
 #### Desktop i7 4.5Ghz
 
-[![desktop](results/desktop-fps.png)](https://rawgit.com/webbhuset/test-elm-performance/master/results/charts.html)
+[![desktop](results/desktop-fps-2.png)](https://rawgit.com/webbhuset/test-elm-performance/master/results/charts.html)
 
 #### Samsung Galaxy S7
 
-[![galaxy](results/galaxy-fps.png)](https://rawgit.com/webbhuset/test-elm-performance/master/results/charts.html)
+[![galaxy](results/galaxy-fps-2.png)](https://rawgit.com/webbhuset/test-elm-performance/master/results/charts.html)
 
 ## Conclusion
 
