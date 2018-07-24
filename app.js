@@ -13240,6 +13240,2501 @@ var _rtfeldman$elm_css$Css$thin = _rtfeldman$elm_css$Css$IntentionallyUnsupporte
 var _rtfeldman$elm_css$Css$thick = _rtfeldman$elm_css$Css$IntentionallyUnsupportedPleaseSeeDocs;
 var _rtfeldman$elm_css$Css$blink = _rtfeldman$elm_css$Css$IntentionallyUnsupportedPleaseSeeDocs;
 
+var _rtfeldman$elm_css$Css_Structure_Output$noIndent = '';
+var _rtfeldman$elm_css$Css_Structure_Output$spaceIndent = '    ';
+var _rtfeldman$elm_css$Css_Structure_Output$indent = function (str) {
+	return A2(_elm_lang$core$Basics_ops['++'], _rtfeldman$elm_css$Css_Structure_Output$spaceIndent, str);
+};
+var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperty = function (_p0) {
+	var _p1 = _p0;
+	var suffix = _p1.important ? ' !important;' : ';';
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_p1.key,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			': ',
+			A2(_elm_lang$core$Basics_ops['++'], _p1.value, suffix)));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperties = function (properties) {
+	return A2(
+		_elm_lang$core$String$join,
+		'\n',
+		A2(
+			_elm_lang$core$List$map,
+			function (_p2) {
+				return _rtfeldman$elm_css$Css_Structure_Output$indent(
+					_rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperty(_p2));
+			},
+			properties));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$combinatorToString = function (combinator) {
+	var _p3 = combinator;
+	switch (_p3.ctor) {
+		case 'AdjacentSibling':
+			return '+';
+		case 'GeneralSibling':
+			return '~';
+		case 'Child':
+			return '>';
+		default:
+			return '';
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$pseudoElementToString = function (_p4) {
+	var _p5 = _p4;
+	return A2(_elm_lang$core$Basics_ops['++'], '::', _p5._0);
+};
+var _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString = function (repeatableSimpleSelector) {
+	var _p6 = repeatableSimpleSelector;
+	switch (_p6.ctor) {
+		case 'ClassSelector':
+			return A2(_elm_lang$core$Basics_ops['++'], '.', _p6._0);
+		case 'IdSelector':
+			return A2(_elm_lang$core$Basics_ops['++'], '#', _p6._0);
+		default:
+			return A2(_elm_lang$core$Basics_ops['++'], ':', _p6._0);
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString = function (simpleSelectorSequence) {
+	var _p7 = simpleSelectorSequence;
+	switch (_p7.ctor) {
+		case 'TypeSelectorSequence':
+			return A2(
+				_elm_lang$core$String$join,
+				'',
+				{
+					ctor: '::',
+					_0: _p7._0._0,
+					_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p7._1)
+				});
+		case 'UniversalSelectorSequence':
+			var _p8 = _p7._0;
+			return _elm_lang$core$List$isEmpty(_p8) ? '*' : A2(
+				_elm_lang$core$String$join,
+				'',
+				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p8));
+		default:
+			return A2(
+				_elm_lang$core$String$join,
+				'',
+				{
+					ctor: '::',
+					_0: _p7._0,
+					_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p7._1)
+				});
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$selectorChainToString = function (_p9) {
+	var _p10 = _p9;
+	return A2(
+		_elm_lang$core$String$join,
+		' ',
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure_Output$combinatorToString(_p10._0),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString(_p10._1),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _rtfeldman$elm_css$Css_Structure_Output$selectorToString = function (_p11) {
+	var _p12 = _p11;
+	var pseudoElementsString = A2(
+		_elm_lang$core$String$join,
+		'',
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Maybe$withDefault,
+				'',
+				A2(_elm_lang$core$Maybe$map, _rtfeldman$elm_css$Css_Structure_Output$pseudoElementToString, _p12._2)),
+			_1: {ctor: '[]'}
+		});
+	var segments = A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString(_p12._0),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$selectorChainToString, _p12._1));
+	return A3(
+		_elm_lang$core$Basics$flip,
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$Basics_ops['++'], x, y);
+			}),
+		pseudoElementsString,
+		A2(
+			_elm_lang$core$String$join,
+			' ',
+			A2(
+				_elm_lang$core$List$filter,
+				function (_p13) {
+					return !_elm_lang$core$String$isEmpty(_p13);
+				},
+				segments)));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString = function (expression) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			expression.feature,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					'',
+					A2(
+						_elm_lang$core$Maybe$map,
+						F2(
+							function (x, y) {
+								return A2(_elm_lang$core$Basics_ops['++'], x, y);
+							})(': '),
+						expression.value)),
+				')')));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$mediaTypeToString = function (mediaType) {
+	var _p14 = mediaType;
+	switch (_p14.ctor) {
+		case 'Print':
+			return 'print';
+		case 'Screen':
+			return 'screen';
+		default:
+			return 'speech';
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$mediaQueryToString = function (mediaQuery) {
+	var prefixWith = F3(
+		function (str, mediaType, expressions) {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				str,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' ',
+					A2(
+						_elm_lang$core$String$join,
+						' and ',
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css_Structure_Output$mediaTypeToString(mediaType),
+							_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString, expressions)
+						})));
+		});
+	var _p15 = mediaQuery;
+	switch (_p15.ctor) {
+		case 'AllQuery':
+			return A2(
+				_elm_lang$core$String$join,
+				' and ',
+				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString, _p15._0));
+		case 'OnlyQuery':
+			return A3(prefixWith, 'only', _p15._0, _p15._1);
+		case 'NotQuery':
+			return A3(prefixWith, 'not', _p15._0, _p15._1);
+		default:
+			return _p15._0;
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock = F2(
+	function (indentLevel, _p16) {
+		var _p17 = _p16;
+		var selectorStr = A2(
+			_elm_lang$core$String$join,
+			', ',
+			A2(
+				_elm_lang$core$List$map,
+				_rtfeldman$elm_css$Css_Structure_Output$selectorToString,
+				{ctor: '::', _0: _p17._0, _1: _p17._1}));
+		return A2(
+			_elm_lang$core$String$join,
+			'',
+			{
+				ctor: '::',
+				_0: selectorStr,
+				_1: {
+					ctor: '::',
+					_0: ' {\n',
+					_1: {
+						ctor: '::',
+						_0: indentLevel,
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperties(_p17._2),
+							_1: {
+								ctor: '::',
+								_0: '\n',
+								_1: {
+									ctor: '::',
+									_0: indentLevel,
+									_1: {
+										ctor: '::',
+										_0: '}',
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintDeclaration = function (declaration) {
+	var _p18 = declaration;
+	switch (_p18.ctor) {
+		case 'StyleBlockDeclaration':
+			return A2(_rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock, _rtfeldman$elm_css$Css_Structure_Output$noIndent, _p18._0);
+		case 'MediaRule':
+			var query = A2(
+				_elm_lang$core$String$join,
+				',\n',
+				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaQueryToString, _p18._0));
+			var blocks = A2(
+				_elm_lang$core$String$join,
+				'\n\n',
+				A2(
+					_elm_lang$core$List$map,
+					function (_p19) {
+						return _rtfeldman$elm_css$Css_Structure_Output$indent(
+							A2(_rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock, _rtfeldman$elm_css$Css_Structure_Output$spaceIndent, _p19));
+					},
+					_p18._1));
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'@media ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					query,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' {\n',
+						A2(_elm_lang$core$Basics_ops['++'], blocks, '\n}'))));
+		default:
+			return _elm_lang$core$Native_Utils.crashCase(
+				'Css.Structure.Output',
+				{
+					start: {line: 61, column: 5},
+					end: {line: 78, column: 49}
+				},
+				_p18)('not yet implemented :x');
+	}
+};
+var _rtfeldman$elm_css$Css_Structure_Output$namespaceToString = function (_p21) {
+	var _p22 = _p21;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'@namespace ',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p22._0,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'\"',
+				A2(_elm_lang$core$Basics_ops['++'], _p22._1, '\"'))));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$importToString = function (_p23) {
+	var _p24 = _p23;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'@import \"',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p24._0,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(_p24._1),
+				'\"')));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$charsetToString = function (charset) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		'',
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (str) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					'@charset \"',
+					A2(_elm_lang$core$Basics_ops['++'], str, '\"'));
+			},
+			charset));
+};
+var _rtfeldman$elm_css$Css_Structure_Output$prettyPrint = function (_p25) {
+	var _p26 = _p25;
+	return A2(
+		_elm_lang$core$String$join,
+		'\n\n',
+		A2(
+			_elm_lang$core$List$filter,
+			function (_p27) {
+				return !_elm_lang$core$String$isEmpty(_p27);
+			},
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css_Structure_Output$charsetToString(_p26.charset),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$String$join,
+						'\n',
+						A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$importToString, _p26.imports)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$String$join,
+							'\n',
+							A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$namespaceToString, _p26.namespaces)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$String$join,
+								'\n\n',
+								A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$prettyPrintDeclaration, _p26.declarations)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}));
+};
+
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$oneOf = function (maybes) {
+	oneOf:
+	while (true) {
+		var _p0 = maybes;
+		if (_p0.ctor === '[]') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			var _p2 = _p0._0;
+			var _p1 = _p2;
+			if (_p1.ctor === 'Nothing') {
+				var _v2 = _p0._1;
+				maybes = _v2;
+				continue oneOf;
+			} else {
+				return _p2;
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors = function (declarations) {
+	collectSelectors:
+	while (true) {
+		var _p3 = declarations;
+		if (_p3.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			if (_p3._0.ctor === 'StyleBlockDeclaration') {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					{ctor: '::', _0: _p3._0._0._0, _1: _p3._0._0._1},
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(_p3._1));
+			} else {
+				var _v4 = _p3._1;
+				declarations = _v4;
+				continue collectSelectors;
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning = function (_p4) {
+	var _p5 = _p4;
+	return {
+		ctor: '_Tuple2',
+		_0: _p5.warnings,
+		_1: {key: _p5.key, value: _p5.value, important: _p5.important}
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings = function (properties) {
+	return {
+		ctor: '_Tuple2',
+		_0: A2(
+			_elm_lang$core$List$concatMap,
+			function (_) {
+				return _.warnings;
+			},
+			properties),
+		_1: A2(
+			_elm_lang$core$List$map,
+			function (prop) {
+				return _elm_lang$core$Tuple$second(
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(prop));
+			},
+			properties)
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule = F5(
+	function (str1, str2, str3, str4, declaration) {
+		var _p6 = declaration;
+		if (_p6.ctor === 'StyleBlockDeclaration') {
+			return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, str1, str2, str3, str4, _p6._0);
+		} else {
+			return declaration;
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration = function (declarations) {
+	lastDeclaration:
+	while (true) {
+		var _p7 = declarations;
+		if (_p7.ctor === '[]') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			if (_p7._1.ctor === '[]') {
+				return _elm_lang$core$Maybe$Just(
+					{
+						ctor: '::',
+						_0: _p7._0,
+						_1: {ctor: '[]'}
+					});
+			} else {
+				var _v8 = _p7._1;
+				declarations = _v8;
+				continue lastDeclaration;
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings = function (declarationsAndWarnings) {
+	var _p8 = declarationsAndWarnings;
+	if (_p8.ctor === '[]') {
+		return {
+			declarations: {ctor: '[]'},
+			warnings: {ctor: '[]'}
+		};
+	} else {
+		var result = _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(_p8._1);
+		return {
+			declarations: A2(_elm_lang$core$Basics_ops['++'], _p8._0.declarations, result.declarations),
+			warnings: A2(_elm_lang$core$Basics_ops['++'], _p8._0.warnings, result.warnings)
+		};
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues = function (tuples) {
+	var expandTuples = function (tuplesToExpand) {
+		var _p9 = tuplesToExpand;
+		if (_p9.ctor === '[]') {
+			return {
+				ctor: '_Tuple2',
+				_0: {ctor: '[]'},
+				_1: {ctor: '[]'}
+			};
+		} else {
+			var _p10 = expandTuples(_p9._1);
+			var nextWarnings = _p10._0;
+			var nextTuples = _p10._1;
+			var _p11 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(_p9._0._1);
+			var warnings = _p11._0;
+			var properties = _p11._1;
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_elm_lang$core$Basics_ops['++'], warnings, nextWarnings),
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: _p9._0._0, _1: properties},
+					_1: nextTuples
+				}
+			};
+		}
+	};
+	var _p12 = expandTuples(tuples);
+	var warnings = _p12._0;
+	var newTuples = _p12._1;
+	return {
+		declarations: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure$FontFeatureValues(newTuples),
+			_1: {ctor: '[]'}
+		},
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle = function (counterStyleProperties) {
+	var _p13 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(counterStyleProperties);
+	var warnings = _p13._0;
+	var properties = _p13._1;
+	return {
+		declarations: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure$Viewport(properties),
+			_1: {ctor: '[]'}
+		},
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport = function (viewportProperties) {
+	var _p14 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(viewportProperties);
+	var warnings = _p14._0;
+	var properties = _p14._1;
+	return {
+		declarations: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure$Viewport(properties),
+			_1: {ctor: '[]'}
+		},
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes = F2(
+	function (str, properties) {
+		return {
+			declarations: {
+				ctor: '::',
+				_0: A2(_rtfeldman$elm_css$Css_Structure$Keyframes, str, properties),
+				_1: {ctor: '[]'}
+			},
+			warnings: {ctor: '[]'}
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace = function (fontFaceProperties) {
+	var _p15 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(fontFaceProperties);
+	var warnings = _p15._0;
+	var properties = _p15._1;
+	return {
+		declarations: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure$FontFace(properties),
+			_1: {ctor: '[]'}
+		},
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule = F2(
+	function (str, pageRuleProperties) {
+		var _p16 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(pageRuleProperties);
+		var warnings = _p16._0;
+		var properties = _p16._1;
+		return {
+			declarations: {
+				ctor: '::',
+				_0: A2(_rtfeldman$elm_css$Css_Structure$PageRule, str, properties),
+				_1: {ctor: '[]'}
+			},
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule = F2(
+	function (mediaQueries, declaration) {
+		var _p17 = declaration;
+		switch (_p17.ctor) {
+			case 'StyleBlockDeclaration':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$MediaRule,
+					mediaQueries,
+					{
+						ctor: '::',
+						_0: _p17._0,
+						_1: {ctor: '[]'}
+					});
+			case 'MediaRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$MediaRule,
+					A2(_elm_lang$core$Basics_ops['++'], mediaQueries, _p17._0),
+					_p17._1);
+			case 'SupportsRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$SupportsRule,
+					_p17._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
+						_p17._1));
+			case 'DocumentRule':
+				return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p17._0, _p17._1, _p17._2, _p17._3, _p17._4);
+			case 'PageRule':
+				return declaration;
+			case 'FontFace':
+				return declaration;
+			case 'Keyframes':
+				return declaration;
+			case 'Viewport':
+				return declaration;
+			case 'CounterStyle':
+				return declaration;
+			default:
+				return declaration;
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule = F2(
+	function (mediaQueries, styleBlocks) {
+		var handleStyleBlock = function (styleBlock) {
+			var _p18 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
+			var declarations = _p18.declarations;
+			var warnings = _p18.warnings;
+			return {
+				declarations: A2(
+					_elm_lang$core$List$map,
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
+					declarations),
+				warnings: warnings
+			};
+		};
+		var results = A2(_elm_lang$core$List$map, handleStyleBlock, styleBlocks);
+		return {
+			warnings: A2(
+				_elm_lang$core$List$concatMap,
+				function (_) {
+					return _.warnings;
+				},
+				results),
+			declarations: A2(
+				_elm_lang$core$List$concatMap,
+				function (_) {
+					return _.declarations;
+				},
+				results)
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock = function (_p19) {
+	var _p20 = _p19;
+	return A2(
+		_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
+		_p20._2,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+				A3(
+					_rtfeldman$elm_css$Css_Structure$StyleBlock,
+					_p20._0,
+					_p20._1,
+					{ctor: '[]'})),
+			_1: {ctor: '[]'}
+		});
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles = F2(
+	function (styles, declarations) {
+		applyStyles:
+		while (true) {
+			var _p21 = styles;
+			if (_p21.ctor === '[]') {
+				return {
+					declarations: declarations,
+					warnings: {ctor: '[]'}
+				};
+			} else {
+				switch (_p21._0.ctor) {
+					case 'AppendProperty':
+						var _p22 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(_p21._0._0);
+						var warnings = _p22._0;
+						var property = _p22._1;
+						var result = A2(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
+							_p21._1,
+							A2(_rtfeldman$elm_css$Css_Structure$appendProperty, property, declarations));
+						return {
+							declarations: result.declarations,
+							warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, result.warnings)
+						};
+					case 'ExtendSelector':
+						return A4(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast,
+							_p21._0._1,
+							_p21._1,
+							_rtfeldman$elm_css$Css_Structure$appendRepeatableToLastSelector(_p21._0._0),
+							declarations);
+					case 'NestSnippet':
+						var chain = F2(
+							function (_p24, _p23) {
+								var _p25 = _p24;
+								var _p26 = _p23;
+								return A3(
+									_rtfeldman$elm_css$Css_Structure$Selector,
+									_p25._0,
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_p25._1,
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: _p21._0._0, _1: _p26._0},
+											_1: _p26._1
+										}),
+									_rtfeldman$elm_css$Css_Preprocess_Resolve$oneOf(
+										{
+											ctor: '::',
+											_0: _p26._2,
+											_1: {
+												ctor: '::',
+												_0: _p25._2,
+												_1: {ctor: '[]'}
+											}
+										}));
+							});
+						var expandDeclaration = function (declaration) {
+							var _p27 = declaration;
+							switch (_p27.ctor) {
+								case 'StyleBlockDeclaration':
+									var newSelectors = A2(
+										_elm_lang$core$List$concatMap,
+										function (originalSelector) {
+											return A2(
+												_elm_lang$core$List$map,
+												chain(originalSelector),
+												{ctor: '::', _0: _p27._0._0, _1: _p27._0._1});
+										},
+										_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations));
+									var newDeclarations = function () {
+										var _p28 = newSelectors;
+										if (_p28.ctor === '[]') {
+											return {ctor: '[]'};
+										} else {
+											return {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+													A3(
+														_rtfeldman$elm_css$Css_Structure$StyleBlock,
+														_p28._0,
+														_p28._1,
+														{ctor: '[]'})),
+												_1: {ctor: '[]'}
+											};
+										}
+									}();
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+										{
+											ctor: '::',
+											_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p27._0._2, newDeclarations),
+											_1: {ctor: '[]'}
+										});
+								case 'MediaRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p27._0, _p27._1);
+								case 'SupportsRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p27._0, _p27._1);
+								case 'DocumentRule':
+									return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p27._0, _p27._1, _p27._2, _p27._3, _p27._4);
+								case 'PageRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p27._0, _p27._1);
+								case 'FontFace':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p27._0);
+								case 'Keyframes':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p27._0, _p27._1);
+								case 'Viewport':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p27._0);
+								case 'CounterStyle':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p27._0);
+								default:
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p27._0);
+							}
+						};
+						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+							A2(
+								F2(
+									function (x, y) {
+										return A2(_elm_lang$core$Basics_ops['++'], x, y);
+									}),
+								{
+									ctor: '::',
+									_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._1, declarations),
+									_1: {ctor: '[]'}
+								},
+								A2(
+									_elm_lang$core$List$map,
+									expandDeclaration,
+									A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p21._0._1))));
+					case 'WithPseudoElement':
+						return A4(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast,
+							_p21._0._1,
+							_p21._1,
+							_rtfeldman$elm_css$Css_Structure$appendPseudoElementToLastSelector(_p21._0._0),
+							declarations);
+					case 'WithMedia':
+						var newDeclarations = function () {
+							var _p29 = _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations);
+							if (_p29.ctor === '[]') {
+								return {ctor: '[]'};
+							} else {
+								return {
+									ctor: '::',
+									_0: A2(
+										_rtfeldman$elm_css$Css_Structure$MediaRule,
+										_p21._0._0,
+										{
+											ctor: '::',
+											_0: A3(
+												_rtfeldman$elm_css$Css_Structure$StyleBlock,
+												_p29._0,
+												_p29._1,
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								};
+							}
+						}();
+						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+							{
+								ctor: '::',
+								_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._1, declarations),
+								_1: {
+									ctor: '::',
+									_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._0._1, newDeclarations),
+									_1: {ctor: '[]'}
+								}
+							});
+					default:
+						var _v19 = A2(_elm_lang$core$Basics_ops['++'], _p21._0._0, _p21._1),
+							_v20 = declarations;
+						styles = _v19;
+						declarations = _v20;
+						continue applyStyles;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast = F4(
+	function (nestedStyles, rest, f, declarations) {
+		var withoutParent = function (decls) {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '[]'},
+				_elm_lang$core$List$tail(decls));
+		};
+		var nextResult = A2(
+			_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
+			rest,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '[]'},
+				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
+		var newDeclarations = function () {
+			var _p30 = {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$List$head(nextResult.declarations),
+				_1: _elm_lang$core$List$head(
+					_elm_lang$core$List$reverse(declarations))
+			};
+			if (((_p30.ctor === '_Tuple2') && (_p30._0.ctor === 'Just')) && (_p30._1.ctor === 'Just')) {
+				var _p32 = _p30._1._0;
+				var _p31 = _p30._0._0;
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$take,
+						_elm_lang$core$List$length(declarations) - 1,
+						declarations),
+					{
+						ctor: '::',
+						_0: (!_elm_lang$core$Native_Utils.eq(_p32, _p31)) ? _p31 : _p32,
+						_1: {ctor: '[]'}
+					});
+			} else {
+				return declarations;
+			}
+		}();
+		var handleInitial = function (declarationsAndWarnings) {
+			var result = A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, nestedStyles, declarationsAndWarnings.declarations);
+			return {
+				warnings: A2(_elm_lang$core$Basics_ops['++'], declarationsAndWarnings.warnings, result.warnings),
+				declarations: result.declarations
+			};
+		};
+		var insertStylesToNestedDecl = function (lastDecl) {
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+				A2(
+					_rtfeldman$elm_css$Css_Structure$mapLast,
+					handleInitial,
+					A2(
+						_elm_lang$core$List$map,
+						function (declaration) {
+							return {
+								declarations: {
+									ctor: '::',
+									_0: declaration,
+									_1: {ctor: '[]'}
+								},
+								warnings: {ctor: '[]'}
+							};
+						},
+						A2(_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock, f, lastDecl))));
+		};
+		var initialResult = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{
+				warnings: {ctor: '[]'},
+				declarations: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$Maybe$map,
+				insertStylesToNestedDecl,
+				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
+		return {
+			warnings: A2(_elm_lang$core$Basics_ops['++'], initialResult.warnings, nextResult.warnings),
+			declarations: A2(
+				_elm_lang$core$Basics_ops['++'],
+				newDeclarations,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					withoutParent(initialResult.declarations),
+					withoutParent(nextResult.declarations)))
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule = F5(
+	function (str1, str2, str3, str4, styleBlock) {
+		var _p33 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
+		var declarations = _p33.declarations;
+		var warnings = _p33.warnings;
+		return {
+			declarations: A2(
+				_elm_lang$core$List$map,
+				A4(_rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule, str1, str2, str3, str4),
+				declarations),
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule = F2(
+	function (str, snippets) {
+		var _p34 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
+			A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, snippets));
+		var declarations = _p34.declarations;
+		var warnings = _p34.warnings;
+		return {
+			declarations: {
+				ctor: '::',
+				_0: A2(_rtfeldman$elm_css$Css_Structure$SupportsRule, str, declarations),
+				_1: {ctor: '[]'}
+			},
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extract = function (snippetDeclarations) {
+	var _p35 = snippetDeclarations;
+	if (_p35.ctor === '[]') {
+		return {
+			declarations: {ctor: '[]'},
+			warnings: {ctor: '[]'}
+		};
+	} else {
+		var _p36 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations(_p35._0);
+		var declarations = _p36.declarations;
+		var warnings = _p36.warnings;
+		var nextResult = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(_p35._1);
+		return {
+			declarations: A2(_elm_lang$core$Basics_ops['++'], declarations, nextResult.declarations),
+			warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, nextResult.warnings)
+		};
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations = function (snippetDeclaration) {
+	var _p37 = snippetDeclaration;
+	switch (_p37.ctor) {
+		case 'StyleBlockDeclaration':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(_p37._0);
+		case 'MediaRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p37._0, _p37._1);
+		case 'SupportsRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p37._0, _p37._1);
+		case 'DocumentRule':
+			return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p37._0, _p37._1, _p37._2, _p37._3, _p37._4);
+		case 'PageRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p37._0, _p37._1);
+		case 'FontFace':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p37._0);
+		case 'Keyframes':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p37._0, _p37._1);
+		case 'Viewport':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p37._0);
+		case 'CounterStyle':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p37._0);
+		default:
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p37._0);
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure = function (_p38) {
+	var _p39 = _p38;
+	var _p40 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
+		A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p39.snippets));
+	var warnings = _p40.warnings;
+	var declarations = _p40.declarations;
+	return {
+		ctor: '_Tuple2',
+		_0: {charset: _p39.charset, imports: _p39.imports, namespaces: _p39.namespaces, declarations: declarations},
+		_1: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1 = function (sheet) {
+	var _p41 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure(sheet);
+	var structureStylesheet = _p41._0;
+	var warnings = _p41._1;
+	return {
+		warnings: warnings,
+		css: _rtfeldman$elm_css$Css_Structure_Output$prettyPrint(
+			_rtfeldman$elm_css$Css_Structure$dropEmpty(structureStylesheet))
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile = function (styles) {
+	var results = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1, styles);
+	return {
+		warnings: A2(
+			_elm_lang$core$List$concatMap,
+			function (_) {
+				return _.warnings;
+			},
+			results),
+		css: A2(
+			_elm_lang$core$String$join,
+			'\n\n',
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.css;
+				},
+				results))
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$DeclarationsAndWarnings = F2(
+	function (a, b) {
+		return {declarations: a, warnings: b};
+	});
+
+var _rtfeldman$elm_css$VirtualDom_Styled$containsKey = F2(
+	function (key, pairs) {
+		containsKey:
+		while (true) {
+			var _p0 = pairs;
+			if (_p0.ctor === '[]') {
+				return false;
+			} else {
+				if (_elm_lang$core$Native_Utils.eq(key, _p0._0._0)) {
+					return true;
+				} else {
+					var _v1 = key,
+						_v2 = _p0._1;
+					key = _v1;
+					pairs = _v2;
+					continue containsKey;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$getUnusedKey = F2(
+	function ($default, pairs) {
+		getUnusedKey:
+		while (true) {
+			var _p1 = pairs;
+			if (_p1.ctor === '[]') {
+				return $default;
+			} else {
+				var _p2 = _p1._1;
+				var newKey = A2(_elm_lang$core$Basics_ops['++'], '_', _p1._0._0);
+				if (A2(_rtfeldman$elm_css$VirtualDom_Styled$containsKey, newKey, _p2)) {
+					var _v4 = newKey,
+						_v5 = _p2;
+					$default = _v4;
+					pairs = _v5;
+					continue getUnusedKey;
+				} else {
+					return newKey;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty = function (_p3) {
+	var _p4 = _p3;
+	return _p4._0;
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$stylesFromPropertiesHelp = F2(
+	function (candidate, properties) {
+		stylesFromPropertiesHelp:
+		while (true) {
+			var _p5 = properties;
+			if (_p5.ctor === '[]') {
+				return candidate;
+			} else {
+				var _p7 = _p5._1;
+				var _p6 = _p5._0._2;
+				if (_elm_lang$core$String$isEmpty(_p6)) {
+					var _v8 = candidate,
+						_v9 = _p7;
+					candidate = _v8;
+					properties = _v9;
+					continue stylesFromPropertiesHelp;
+				} else {
+					var _v10 = _elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: _p6, _1: _p5._0._1}),
+						_v11 = _p7;
+					candidate = _v10;
+					properties = _v11;
+					continue stylesFromPropertiesHelp;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties = function (properties) {
+	var _p8 = A2(_rtfeldman$elm_css$VirtualDom_Styled$stylesFromPropertiesHelp, _elm_lang$core$Maybe$Nothing, properties);
+	if (_p8.ctor === 'Nothing') {
+		return _elm_lang$core$Dict$empty;
+	} else {
+		return A2(_elm_lang$core$Dict$singleton, _p8._0._0, _p8._0._1);
+	}
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles = F2(
+	function (_p9, styles) {
+		var _p10 = _p9;
+		var _p11 = _p10._1;
+		return _elm_lang$core$List$isEmpty(_p11) ? styles : A3(_elm_lang$core$Dict$insert, _p10._2, _p11, styles);
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml = F2(
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p23 = _p14._0;
+		var _p15 = _p12;
+		var _p22 = _p15._1;
+		var _p21 = _p15._0;
+		var _p16 = _p14._1;
+		switch (_p16.ctor) {
+			case 'Unstyled':
+				return {
+					ctor: '_Tuple2',
+					_0: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _p23, _1: _p16._0},
+						_1: _p21
+					},
+					_1: _p22
+				};
+			case 'Element':
+				var _p18 = _p16._1;
+				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p22, _p18);
+				var _p17 = A3(
+					_elm_lang$core$List$foldl,
+					_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
+					{
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: combinedStyles
+					},
+					_p16._2);
+				var childNodes = _p17._0;
+				var finalStyles = _p17._1;
+				var vdom = A3(
+					_elm_lang$virtual_dom$VirtualDom$node,
+					_p16._0,
+					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p18),
+					_elm_lang$core$List$reverse(childNodes));
+				return {
+					ctor: '_Tuple2',
+					_0: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _p23, _1: vdom},
+						_1: _p21
+					},
+					_1: finalStyles
+				};
+			default:
+				var _p20 = _p16._1;
+				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p22, _p20);
+				var _p19 = A3(
+					_elm_lang$core$List$foldl,
+					_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
+					{
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: combinedStyles
+					},
+					_p16._2);
+				var childNodes = _p19._0;
+				var finalStyles = _p19._1;
+				var vdom = A3(
+					_elm_lang$virtual_dom$VirtualDom$keyedNode,
+					_p16._0,
+					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p20),
+					_elm_lang$core$List$reverse(childNodes));
+				return {
+					ctor: '_Tuple2',
+					_0: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _p23, _1: vdom},
+						_1: _p21
+					},
+					_1: finalStyles
+				};
+		}
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml = F2(
+	function (html, _p24) {
+		var _p25 = _p24;
+		var _p32 = _p25._1;
+		var _p31 = _p25._0;
+		var _p26 = html;
+		switch (_p26.ctor) {
+			case 'Unstyled':
+				return {
+					ctor: '_Tuple2',
+					_0: {ctor: '::', _0: _p26._0, _1: _p31},
+					_1: _p32
+				};
+			case 'Element':
+				var _p28 = _p26._1;
+				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p32, _p28);
+				var _p27 = A3(
+					_elm_lang$core$List$foldl,
+					_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
+					{
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: combinedStyles
+					},
+					_p26._2);
+				var childNodes = _p27._0;
+				var finalStyles = _p27._1;
+				var node = A3(
+					_elm_lang$virtual_dom$VirtualDom$node,
+					_p26._0,
+					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p28),
+					_elm_lang$core$List$reverse(childNodes));
+				return {
+					ctor: '_Tuple2',
+					_0: {ctor: '::', _0: node, _1: _p31},
+					_1: finalStyles
+				};
+			default:
+				var _p30 = _p26._1;
+				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p32, _p30);
+				var _p29 = A3(
+					_elm_lang$core$List$foldl,
+					_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
+					{
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: combinedStyles
+					},
+					_p26._2);
+				var childNodes = _p29._0;
+				var finalStyles = _p29._1;
+				var node = A3(
+					_elm_lang$virtual_dom$VirtualDom$keyedNode,
+					_p26._0,
+					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p30),
+					_elm_lang$core$List$reverse(childNodes));
+				return {
+					ctor: '_Tuple2',
+					_0: {ctor: '::', _0: node, _1: _p31},
+					_1: finalStyles
+				};
+		}
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$murmurSeed = 15739;
+var _rtfeldman$elm_css$VirtualDom_Styled$makeSnippet = F2(
+	function (styles, sequence) {
+		var selector = A3(
+			_rtfeldman$elm_css$Css_Structure$Selector,
+			sequence,
+			{ctor: '[]'},
+			_elm_lang$core$Maybe$Nothing);
+		return _rtfeldman$elm_css$Css_Preprocess$Snippet(
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css_Preprocess$StyleBlockDeclaration(
+					A3(
+						_rtfeldman$elm_css$Css_Preprocess$StyleBlock,
+						selector,
+						{ctor: '[]'},
+						styles)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$snippetFromPair = function (_p33) {
+	var _p34 = _p33;
+	return A2(
+		_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
+		_p34._1,
+		_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css_Structure$ClassSelector(_p34._0),
+				_1: {ctor: '[]'}
+			}));
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$toDeclaration = function (dict) {
+	return function (_) {
+		return _.css;
+	}(
+		_rtfeldman$elm_css$Css_Preprocess_Resolve$compile(
+			_elm_lang$core$List$singleton(
+				_rtfeldman$elm_css$Css_Preprocess$stylesheet(
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$VirtualDom_Styled$snippetFromPair,
+						_elm_lang$core$Dict$toList(dict))))));
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode = function (styles) {
+	return A3(
+		_elm_lang$virtual_dom$VirtualDom$node,
+		'style',
+		{ctor: '[]'},
+		_elm_lang$core$List$singleton(
+			_elm_lang$virtual_dom$VirtualDom$text(
+				_rtfeldman$elm_css$VirtualDom_Styled$toDeclaration(styles))));
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$unstyle = F3(
+	function (elemType, properties, children) {
+		var unstyledProperties = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, properties);
+		var initialStyles = _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties(properties);
+		var _p35 = A3(
+			_elm_lang$core$List$foldl,
+			_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
+			{
+				ctor: '_Tuple2',
+				_0: {ctor: '[]'},
+				_1: initialStyles
+			},
+			children);
+		var childNodes = _p35._0;
+		var styles = _p35._1;
+		var styleNode = _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode(styles);
+		return A3(
+			_elm_lang$virtual_dom$VirtualDom$node,
+			elemType,
+			unstyledProperties,
+			{
+				ctor: '::',
+				_0: styleNode,
+				_1: _elm_lang$core$List$reverse(childNodes)
+			});
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$toKeyedStyleNode = F2(
+	function (allStyles, keyedChildNodes) {
+		var finalNode = _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode(allStyles);
+		var styleNodeKey = A2(_rtfeldman$elm_css$VirtualDom_Styled$getUnusedKey, '_', keyedChildNodes);
+		return {ctor: '_Tuple2', _0: styleNodeKey, _1: finalNode};
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$unstyleKeyed = F3(
+	function (elemType, properties, keyedChildren) {
+		var unstyledProperties = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, properties);
+		var initialStyles = _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties(properties);
+		var _p36 = A3(
+			_elm_lang$core$List$foldl,
+			_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
+			{
+				ctor: '_Tuple2',
+				_0: {ctor: '[]'},
+				_1: initialStyles
+			},
+			keyedChildren);
+		var keyedChildNodes = _p36._0;
+		var styles = _p36._1;
+		var keyedStyleNode = A2(_rtfeldman$elm_css$VirtualDom_Styled$toKeyedStyleNode, styles, keyedChildNodes);
+		return A3(
+			_elm_lang$virtual_dom$VirtualDom$keyedNode,
+			elemType,
+			unstyledProperties,
+			{
+				ctor: '::',
+				_0: keyedStyleNode,
+				_1: _elm_lang$core$List$reverse(keyedChildNodes)
+			});
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$getClassname = function (styles) {
+	return _elm_lang$core$List$isEmpty(styles) ? 'unstyled' : A2(
+		_elm_lang$core$String$cons,
+		_elm_lang$core$Native_Utils.chr('_'),
+		_rtfeldman$hex$Hex$toString(
+			A2(
+				_Skinney$murmur3$Murmur3$hashString,
+				_rtfeldman$elm_css$VirtualDom_Styled$murmurSeed,
+				function (_) {
+					return _.css;
+				}(
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$compile(
+						_elm_lang$core$List$singleton(
+							_rtfeldman$elm_css$Css_Preprocess$stylesheet(
+								_elm_lang$core$List$singleton(
+									A2(
+										_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
+										styles,
+										_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
+											{ctor: '[]'}))))))))));
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$toUnstyled = function (node) {
+	var _p37 = node;
+	switch (_p37.ctor) {
+		case 'Unstyled':
+			return _p37._0;
+		case 'Element':
+			return A3(_rtfeldman$elm_css$VirtualDom_Styled$unstyle, _p37._0, _p37._1, _p37._2);
+		default:
+			return A3(_rtfeldman$elm_css$VirtualDom_Styled$unstyleKeyed, _p37._0, _p37._1, _p37._2);
+	}
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$Unstyled = function (a) {
+	return {ctor: 'Unstyled', _0: a};
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$unstyledNode = _rtfeldman$elm_css$VirtualDom_Styled$Unstyled;
+var _rtfeldman$elm_css$VirtualDom_Styled$text = function (_p38) {
+	return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
+		_elm_lang$virtual_dom$VirtualDom$text(_p38));
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$lazy = F2(
+	function (fn, arg) {
+		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
+			A2(_elm_lang$virtual_dom$VirtualDom$lazy, fn, arg));
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$lazy2 = F3(
+	function (fn, arg1, arg2) {
+		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
+			A3(_elm_lang$virtual_dom$VirtualDom$lazy2, fn, arg1, arg2));
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$lazy3 = F4(
+	function (fn, arg1, arg2, arg3) {
+		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
+			A4(_elm_lang$virtual_dom$VirtualDom$lazy3, fn, arg1, arg2, arg3));
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$KeyedElement = F3(
+	function (a, b, c) {
+		return {ctor: 'KeyedElement', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$keyedNode = _rtfeldman$elm_css$VirtualDom_Styled$KeyedElement;
+var _rtfeldman$elm_css$VirtualDom_Styled$Element = F3(
+	function (a, b, c) {
+		return {ctor: 'Element', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$node = _rtfeldman$elm_css$VirtualDom_Styled$Element;
+var _rtfeldman$elm_css$VirtualDom_Styled$Property = F3(
+	function (a, b, c) {
+		return {ctor: 'Property', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$property = F2(
+	function (key, value) {
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A2(_elm_lang$virtual_dom$VirtualDom$property, key, value),
+			{ctor: '[]'},
+			'');
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$attribute = F2(
+	function (key, value) {
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A2(_elm_lang$virtual_dom$VirtualDom$attribute, key, value),
+			{ctor: '[]'},
+			'');
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$attributeNS = F3(
+	function (namespace, key, value) {
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A3(_elm_lang$virtual_dom$VirtualDom$attributeNS, namespace, key, value),
+			{ctor: '[]'},
+			'');
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$unstyledProperty = function (prop) {
+	return A3(
+		_rtfeldman$elm_css$VirtualDom_Styled$Property,
+		prop,
+		{ctor: '[]'},
+		'');
+};
+var _rtfeldman$elm_css$VirtualDom_Styled$on = F2(
+	function (eventName, decoder) {
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A2(_elm_lang$virtual_dom$VirtualDom$on, eventName, decoder),
+			{ctor: '[]'},
+			'');
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions = F3(
+	function (eventName, options, decoder) {
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A3(_elm_lang$virtual_dom$VirtualDom$onWithOptions, eventName, options, decoder),
+			{ctor: '[]'},
+			'');
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$mapProperty = F2(
+	function (transform, _p39) {
+		var _p40 = _p39;
+		return A3(
+			_rtfeldman$elm_css$VirtualDom_Styled$Property,
+			A2(_elm_lang$virtual_dom$VirtualDom$mapProperty, transform, _p40._0),
+			_p40._1,
+			_p40._2);
+	});
+var _rtfeldman$elm_css$VirtualDom_Styled$map = F2(
+	function (transform, node) {
+		var _p41 = node;
+		switch (_p41.ctor) {
+			case 'Element':
+				return A3(
+					_rtfeldman$elm_css$VirtualDom_Styled$Element,
+					_p41._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$VirtualDom_Styled$mapProperty(transform),
+						_p41._1),
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$VirtualDom_Styled$map(transform),
+						_p41._2));
+			case 'KeyedElement':
+				return A3(
+					_rtfeldman$elm_css$VirtualDom_Styled$KeyedElement,
+					_p41._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$VirtualDom_Styled$mapProperty(transform),
+						_p41._1),
+					A2(
+						_elm_lang$core$List$map,
+						function (_p42) {
+							var _p43 = _p42;
+							return {
+								ctor: '_Tuple2',
+								_0: _p43._0,
+								_1: A2(_rtfeldman$elm_css$VirtualDom_Styled$map, transform, _p43._1)
+							};
+						},
+						_p41._2));
+			default:
+				return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
+					A2(_elm_lang$virtual_dom$VirtualDom$map, transform, _p41._0));
+		}
+	});
+
+var _rtfeldman$elm_css$Html_Styled_Internal$css = function (styles) {
+	var classname = _rtfeldman$elm_css$VirtualDom_Styled$getClassname(styles);
+	var classProperty = A2(
+		_elm_lang$virtual_dom$VirtualDom$property,
+		'className',
+		_elm_lang$core$Json_Encode$string(classname));
+	return A3(_rtfeldman$elm_css$VirtualDom_Styled$Property, classProperty, styles, classname);
+};
+
+var _rtfeldman$elm_css$Html_Styled$fromUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$unstyledNode;
+var _rtfeldman$elm_css$Html_Styled$toUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$toUnstyled;
+var _rtfeldman$elm_css$Html_Styled$program = function (config) {
+	return _elm_lang$virtual_dom$VirtualDom$program(
+		_elm_lang$core$Native_Utils.update(
+			config,
+			{
+				view: function (_p0) {
+					return _rtfeldman$elm_css$Html_Styled$toUnstyled(
+						config.view(_p0));
+				}
+			}));
+};
+var _rtfeldman$elm_css$Html_Styled$beginnerProgram = function (_p1) {
+	var _p2 = _p1;
+	return _rtfeldman$elm_css$Html_Styled$program(
+		{
+			init: A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_p2.model,
+				{ctor: '[]'}),
+			update: F2(
+				function (msg, model) {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						A2(_p2.update, msg, model),
+						{ctor: '[]'});
+				}),
+			view: _p2.view,
+			subscriptions: function (_p3) {
+				return _elm_lang$core$Platform_Sub$none;
+			}
+		});
+};
+var _rtfeldman$elm_css$Html_Styled$programWithFlags = function (config) {
+	return _elm_lang$virtual_dom$VirtualDom$programWithFlags(
+		_elm_lang$core$Native_Utils.update(
+			config,
+			{
+				view: function (_p4) {
+					return _rtfeldman$elm_css$Html_Styled$toUnstyled(
+						config.view(_p4));
+				}
+			}));
+};
+var _rtfeldman$elm_css$Html_Styled$styled = F4(
+	function (fn, styles, attrs, children) {
+		return A2(
+			fn,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Internal$css(styles),
+				_1: attrs
+			},
+			children);
+	});
+var _rtfeldman$elm_css$Html_Styled$map = _rtfeldman$elm_css$VirtualDom_Styled$map;
+var _rtfeldman$elm_css$Html_Styled$text = _rtfeldman$elm_css$VirtualDom_Styled$text;
+var _rtfeldman$elm_css$Html_Styled$node = _rtfeldman$elm_css$VirtualDom_Styled$node;
+var _rtfeldman$elm_css$Html_Styled$body = _rtfeldman$elm_css$Html_Styled$node('body');
+var _rtfeldman$elm_css$Html_Styled$section = _rtfeldman$elm_css$Html_Styled$node('section');
+var _rtfeldman$elm_css$Html_Styled$nav = _rtfeldman$elm_css$Html_Styled$node('nav');
+var _rtfeldman$elm_css$Html_Styled$article = _rtfeldman$elm_css$Html_Styled$node('article');
+var _rtfeldman$elm_css$Html_Styled$aside = _rtfeldman$elm_css$Html_Styled$node('aside');
+var _rtfeldman$elm_css$Html_Styled$h1 = _rtfeldman$elm_css$Html_Styled$node('h1');
+var _rtfeldman$elm_css$Html_Styled$h2 = _rtfeldman$elm_css$Html_Styled$node('h2');
+var _rtfeldman$elm_css$Html_Styled$h3 = _rtfeldman$elm_css$Html_Styled$node('h3');
+var _rtfeldman$elm_css$Html_Styled$h4 = _rtfeldman$elm_css$Html_Styled$node('h4');
+var _rtfeldman$elm_css$Html_Styled$h5 = _rtfeldman$elm_css$Html_Styled$node('h5');
+var _rtfeldman$elm_css$Html_Styled$h6 = _rtfeldman$elm_css$Html_Styled$node('h6');
+var _rtfeldman$elm_css$Html_Styled$header = _rtfeldman$elm_css$Html_Styled$node('header');
+var _rtfeldman$elm_css$Html_Styled$footer = _rtfeldman$elm_css$Html_Styled$node('footer');
+var _rtfeldman$elm_css$Html_Styled$address = _rtfeldman$elm_css$Html_Styled$node('address');
+var _rtfeldman$elm_css$Html_Styled$main_ = _rtfeldman$elm_css$Html_Styled$node('main');
+var _rtfeldman$elm_css$Html_Styled$p = _rtfeldman$elm_css$Html_Styled$node('p');
+var _rtfeldman$elm_css$Html_Styled$hr = _rtfeldman$elm_css$Html_Styled$node('hr');
+var _rtfeldman$elm_css$Html_Styled$pre = _rtfeldman$elm_css$Html_Styled$node('pre');
+var _rtfeldman$elm_css$Html_Styled$blockquote = _rtfeldman$elm_css$Html_Styled$node('blockquote');
+var _rtfeldman$elm_css$Html_Styled$ol = _rtfeldman$elm_css$Html_Styled$node('ol');
+var _rtfeldman$elm_css$Html_Styled$ul = _rtfeldman$elm_css$Html_Styled$node('ul');
+var _rtfeldman$elm_css$Html_Styled$li = _rtfeldman$elm_css$Html_Styled$node('li');
+var _rtfeldman$elm_css$Html_Styled$dl = _rtfeldman$elm_css$Html_Styled$node('dl');
+var _rtfeldman$elm_css$Html_Styled$dt = _rtfeldman$elm_css$Html_Styled$node('dt');
+var _rtfeldman$elm_css$Html_Styled$dd = _rtfeldman$elm_css$Html_Styled$node('dd');
+var _rtfeldman$elm_css$Html_Styled$figure = _rtfeldman$elm_css$Html_Styled$node('figure');
+var _rtfeldman$elm_css$Html_Styled$figcaption = _rtfeldman$elm_css$Html_Styled$node('figcaption');
+var _rtfeldman$elm_css$Html_Styled$div = _rtfeldman$elm_css$Html_Styled$node('div');
+var _rtfeldman$elm_css$Html_Styled$a = _rtfeldman$elm_css$Html_Styled$node('a');
+var _rtfeldman$elm_css$Html_Styled$em = _rtfeldman$elm_css$Html_Styled$node('em');
+var _rtfeldman$elm_css$Html_Styled$strong = _rtfeldman$elm_css$Html_Styled$node('strong');
+var _rtfeldman$elm_css$Html_Styled$small = _rtfeldman$elm_css$Html_Styled$node('small');
+var _rtfeldman$elm_css$Html_Styled$s = _rtfeldman$elm_css$Html_Styled$node('s');
+var _rtfeldman$elm_css$Html_Styled$cite = _rtfeldman$elm_css$Html_Styled$node('cite');
+var _rtfeldman$elm_css$Html_Styled$q = _rtfeldman$elm_css$Html_Styled$node('q');
+var _rtfeldman$elm_css$Html_Styled$dfn = _rtfeldman$elm_css$Html_Styled$node('dfn');
+var _rtfeldman$elm_css$Html_Styled$abbr = _rtfeldman$elm_css$Html_Styled$node('abbr');
+var _rtfeldman$elm_css$Html_Styled$time = _rtfeldman$elm_css$Html_Styled$node('time');
+var _rtfeldman$elm_css$Html_Styled$code = _rtfeldman$elm_css$Html_Styled$node('code');
+var _rtfeldman$elm_css$Html_Styled$var = _rtfeldman$elm_css$Html_Styled$node('var');
+var _rtfeldman$elm_css$Html_Styled$samp = _rtfeldman$elm_css$Html_Styled$node('samp');
+var _rtfeldman$elm_css$Html_Styled$kbd = _rtfeldman$elm_css$Html_Styled$node('kbd');
+var _rtfeldman$elm_css$Html_Styled$sub = _rtfeldman$elm_css$Html_Styled$node('sub');
+var _rtfeldman$elm_css$Html_Styled$sup = _rtfeldman$elm_css$Html_Styled$node('sup');
+var _rtfeldman$elm_css$Html_Styled$i = _rtfeldman$elm_css$Html_Styled$node('i');
+var _rtfeldman$elm_css$Html_Styled$b = _rtfeldman$elm_css$Html_Styled$node('b');
+var _rtfeldman$elm_css$Html_Styled$u = _rtfeldman$elm_css$Html_Styled$node('u');
+var _rtfeldman$elm_css$Html_Styled$mark = _rtfeldman$elm_css$Html_Styled$node('mark');
+var _rtfeldman$elm_css$Html_Styled$ruby = _rtfeldman$elm_css$Html_Styled$node('ruby');
+var _rtfeldman$elm_css$Html_Styled$rt = _rtfeldman$elm_css$Html_Styled$node('rt');
+var _rtfeldman$elm_css$Html_Styled$rp = _rtfeldman$elm_css$Html_Styled$node('rp');
+var _rtfeldman$elm_css$Html_Styled$bdi = _rtfeldman$elm_css$Html_Styled$node('bdi');
+var _rtfeldman$elm_css$Html_Styled$bdo = _rtfeldman$elm_css$Html_Styled$node('bdo');
+var _rtfeldman$elm_css$Html_Styled$span = _rtfeldman$elm_css$Html_Styled$node('span');
+var _rtfeldman$elm_css$Html_Styled$br = _rtfeldman$elm_css$Html_Styled$node('br');
+var _rtfeldman$elm_css$Html_Styled$wbr = _rtfeldman$elm_css$Html_Styled$node('wbr');
+var _rtfeldman$elm_css$Html_Styled$ins = _rtfeldman$elm_css$Html_Styled$node('ins');
+var _rtfeldman$elm_css$Html_Styled$del = _rtfeldman$elm_css$Html_Styled$node('del');
+var _rtfeldman$elm_css$Html_Styled$img = _rtfeldman$elm_css$Html_Styled$node('img');
+var _rtfeldman$elm_css$Html_Styled$iframe = _rtfeldman$elm_css$Html_Styled$node('iframe');
+var _rtfeldman$elm_css$Html_Styled$embed = _rtfeldman$elm_css$Html_Styled$node('embed');
+var _rtfeldman$elm_css$Html_Styled$object = _rtfeldman$elm_css$Html_Styled$node('object');
+var _rtfeldman$elm_css$Html_Styled$param = _rtfeldman$elm_css$Html_Styled$node('param');
+var _rtfeldman$elm_css$Html_Styled$video = _rtfeldman$elm_css$Html_Styled$node('video');
+var _rtfeldman$elm_css$Html_Styled$audio = _rtfeldman$elm_css$Html_Styled$node('audio');
+var _rtfeldman$elm_css$Html_Styled$source = _rtfeldman$elm_css$Html_Styled$node('source');
+var _rtfeldman$elm_css$Html_Styled$track = _rtfeldman$elm_css$Html_Styled$node('track');
+var _rtfeldman$elm_css$Html_Styled$canvas = _rtfeldman$elm_css$Html_Styled$node('canvas');
+var _rtfeldman$elm_css$Html_Styled$math = _rtfeldman$elm_css$Html_Styled$node('math');
+var _rtfeldman$elm_css$Html_Styled$table = _rtfeldman$elm_css$Html_Styled$node('table');
+var _rtfeldman$elm_css$Html_Styled$caption = _rtfeldman$elm_css$Html_Styled$node('caption');
+var _rtfeldman$elm_css$Html_Styled$colgroup = _rtfeldman$elm_css$Html_Styled$node('colgroup');
+var _rtfeldman$elm_css$Html_Styled$col = _rtfeldman$elm_css$Html_Styled$node('col');
+var _rtfeldman$elm_css$Html_Styled$tbody = _rtfeldman$elm_css$Html_Styled$node('tbody');
+var _rtfeldman$elm_css$Html_Styled$thead = _rtfeldman$elm_css$Html_Styled$node('thead');
+var _rtfeldman$elm_css$Html_Styled$tfoot = _rtfeldman$elm_css$Html_Styled$node('tfoot');
+var _rtfeldman$elm_css$Html_Styled$tr = _rtfeldman$elm_css$Html_Styled$node('tr');
+var _rtfeldman$elm_css$Html_Styled$td = _rtfeldman$elm_css$Html_Styled$node('td');
+var _rtfeldman$elm_css$Html_Styled$th = _rtfeldman$elm_css$Html_Styled$node('th');
+var _rtfeldman$elm_css$Html_Styled$form = _rtfeldman$elm_css$Html_Styled$node('form');
+var _rtfeldman$elm_css$Html_Styled$fieldset = _rtfeldman$elm_css$Html_Styled$node('fieldset');
+var _rtfeldman$elm_css$Html_Styled$legend = _rtfeldman$elm_css$Html_Styled$node('legend');
+var _rtfeldman$elm_css$Html_Styled$label = _rtfeldman$elm_css$Html_Styled$node('label');
+var _rtfeldman$elm_css$Html_Styled$input = _rtfeldman$elm_css$Html_Styled$node('input');
+var _rtfeldman$elm_css$Html_Styled$button = _rtfeldman$elm_css$Html_Styled$node('button');
+var _rtfeldman$elm_css$Html_Styled$select = _rtfeldman$elm_css$Html_Styled$node('select');
+var _rtfeldman$elm_css$Html_Styled$datalist = _rtfeldman$elm_css$Html_Styled$node('datalist');
+var _rtfeldman$elm_css$Html_Styled$optgroup = _rtfeldman$elm_css$Html_Styled$node('optgroup');
+var _rtfeldman$elm_css$Html_Styled$option = _rtfeldman$elm_css$Html_Styled$node('option');
+var _rtfeldman$elm_css$Html_Styled$textarea = _rtfeldman$elm_css$Html_Styled$node('textarea');
+var _rtfeldman$elm_css$Html_Styled$keygen = _rtfeldman$elm_css$Html_Styled$node('keygen');
+var _rtfeldman$elm_css$Html_Styled$output = _rtfeldman$elm_css$Html_Styled$node('output');
+var _rtfeldman$elm_css$Html_Styled$progress = _rtfeldman$elm_css$Html_Styled$node('progress');
+var _rtfeldman$elm_css$Html_Styled$meter = _rtfeldman$elm_css$Html_Styled$node('meter');
+var _rtfeldman$elm_css$Html_Styled$details = _rtfeldman$elm_css$Html_Styled$node('details');
+var _rtfeldman$elm_css$Html_Styled$summary = _rtfeldman$elm_css$Html_Styled$node('summary');
+var _rtfeldman$elm_css$Html_Styled$menuitem = _rtfeldman$elm_css$Html_Styled$node('menuitem');
+var _rtfeldman$elm_css$Html_Styled$menu = _rtfeldman$elm_css$Html_Styled$node('menu');
+
+var _rtfeldman$elm_css$Html_Styled_Attributes$css = _rtfeldman$elm_css$Html_Styled_Internal$css;
+var _rtfeldman$elm_css$Html_Styled_Attributes$map = _rtfeldman$elm_css$VirtualDom_Styled$mapProperty;
+var _rtfeldman$elm_css$Html_Styled_Attributes$attribute = _rtfeldman$elm_css$VirtualDom_Styled$attribute;
+var _rtfeldman$elm_css$Html_Styled_Attributes$contextmenu = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'contextmenu', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$draggable = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'draggable', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$itemprop = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'itemprop', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$tabindex = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'tabIndex',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$charset = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'charset', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$height = function (value) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'height',
+		_elm_lang$core$Basics$toString(value));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$width = function (value) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'width',
+		_elm_lang$core$Basics$toString(value));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$formaction = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'formAction', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$list = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'list', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$minlength = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'minLength',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$maxlength = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'maxlength',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$size = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'size',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$form = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'form', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$cols = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'cols',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$rows = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'rows',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$challenge = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'challenge', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$media = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'media', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$rel = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'rel', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$datetime = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'datetime', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$pubdate = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'pubdate', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$colspan = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'colspan',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$rowspan = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
+		'rowspan',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$manifest = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'manifest', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$property = _rtfeldman$elm_css$VirtualDom_Styled$property;
+var _rtfeldman$elm_css$Html_Styled_Attributes$stringProperty = F2(
+	function (name, string) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled_Attributes$property,
+			name,
+			_elm_lang$core$Json_Encode$string(string));
+	});
+var _rtfeldman$elm_css$Html_Styled_Attributes$class = function (name) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'className', name);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$id = function (name) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'id', name);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$title = function (name) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'title', name);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$accesskey = function ($char) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
+		'accessKey',
+		_elm_lang$core$String$fromChar($char));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$dir = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'dir', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$dropzone = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'dropzone', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$lang = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'lang', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$content = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'content', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$httpEquiv = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'httpEquiv', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$language = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'language', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$src = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'src', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$alt = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'alt', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$preload = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'preload', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$poster = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'poster', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$kind = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'kind', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$srclang = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'srclang', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$sandbox = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'sandbox', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$srcdoc = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'srcdoc', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$type_ = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'type', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$value = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'value', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$defaultValue = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'defaultValue', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$placeholder = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'placeholder', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$accept = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'accept', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$acceptCharset = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'acceptCharset', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$action = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'action', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$autocomplete = function (bool) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
+		'autocomplete',
+		bool ? 'on' : 'off');
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$enctype = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'enctype', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$method = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'method', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$name = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'name', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$pattern = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'pattern', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$for = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'htmlFor', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$max = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'max', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$min = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'min', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$step = function (n) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'step', n);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$wrap = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'wrap', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$usemap = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'useMap', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$shape = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'shape', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$coords = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'coords', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$keytype = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'keytype', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$align = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'align', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$cite = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'cite', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$href = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'href', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$target = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'target', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$downloadAs = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'download', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$hreflang = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'hreflang', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$ping = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'ping', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$start = function (n) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
+		'start',
+		_elm_lang$core$Basics$toString(n));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$headers = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'headers', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$scope = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'scope', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$boolProperty = F2(
+	function (name, bool) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled_Attributes$property,
+			name,
+			_elm_lang$core$Json_Encode$bool(bool));
+	});
+var _rtfeldman$elm_css$Html_Styled_Attributes$hidden = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'hidden', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$contenteditable = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'contentEditable', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$spellcheck = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'spellcheck', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$async = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'async', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$defer = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'defer', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$scoped = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'scoped', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$autoplay = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'autoplay', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$controls = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'controls', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$loop = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'loop', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$default = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'default', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$seamless = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'seamless', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$checked = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'checked', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$selected = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'selected', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$autofocus = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'autofocus', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$disabled = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'disabled', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$multiple = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'multiple', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$novalidate = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'noValidate', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$readonly = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'readOnly', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$required = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'required', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$ismap = function (value) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'isMap', value);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$download = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'download', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$reversed = function (bool) {
+	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'reversed', bool);
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$classList = function (list) {
+	return _rtfeldman$elm_css$Html_Styled_Attributes$class(
+		A2(
+			_elm_lang$core$String$join,
+			' ',
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$Tuple$first,
+				A2(_elm_lang$core$List$filter, _elm_lang$core$Tuple$second, list))));
+};
+var _rtfeldman$elm_css$Html_Styled_Attributes$fromUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$unstyledProperty;
+var _rtfeldman$elm_css$Html_Styled_Attributes$style = function (_p0) {
+	return _rtfeldman$elm_css$Html_Styled_Attributes$fromUnstyled(
+		_elm_lang$virtual_dom$VirtualDom$style(_p0));
+};
+
+var _rtfeldman$elm_css$Html_Styled_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _rtfeldman$elm_css$Html_Styled_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _rtfeldman$elm_css$Html_Styled_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _rtfeldman$elm_css$Html_Styled_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$onWithOptions = _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$on = _rtfeldman$elm_css$VirtualDom_Styled$on;
+var _rtfeldman$elm_css$Html_Styled_Events$onFocus = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onBlur = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_rtfeldman$elm_css$Html_Styled_Events$defaultOptions,
+	{preventDefault: true});
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmit = function (msg) {
+	return A3(
+		_rtfeldman$elm_css$Html_Styled_Events$onWithOptions,
+		'submit',
+		_rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onCheck = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetChecked));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onInput = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetValue));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOut = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOver = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseLeave = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseUp = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseDown = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onDoubleClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
+var _elm_lang$virtual_dom$Impl_ElmCss$renderAccordion = F3(
+	function (openMsg, isOpen, acc) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$h4,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(openMsg),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$zero),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$fontFamilies(
+												{
+													ctor: '::',
+													_0: 'Arial',
+													_1: {
+														ctor: '::',
+														_0: function (_) {
+															return _.value;
+														}(_rtfeldman$elm_css$Css$sansSerif),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$backgroundColor(
+													_rtfeldman$elm_css$Css$hex('eee')),
+												_1: {
+													ctor: '::',
+													_0: _rtfeldman$elm_css$Css$padding(
+														_rtfeldman$elm_css$Css$px(8)),
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$fontWeight(
+															_rtfeldman$elm_css$Css$int(400)),
+														_1: {
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css$fontSize(
+																_rtfeldman$elm_css$Css$px(20)),
+															_1: {
+																ctor: '::',
+																_0: A3(
+																	_rtfeldman$elm_css$Css$border3,
+																	_rtfeldman$elm_css$Css$px(1),
+																	_rtfeldman$elm_css$Css$solid,
+																	_rtfeldman$elm_css$Css$hex('aaa')),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$lineHeight(
+																		_rtfeldman$elm_css$Css$px(20)),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled$text(acc.heading),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rtfeldman$elm_css$Html_Styled$p,
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: isOpen ? _rtfeldman$elm_css$Css$height(_rtfeldman$elm_css$Css$auto) : _rtfeldman$elm_css$Css$height(_rtfeldman$elm_css$Css$zero),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$hidden),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$fontFamilies(
+												{
+													ctor: '::',
+													_0: 'Arial',
+													_1: {
+														ctor: '::',
+														_0: function (_) {
+															return _.value;
+														}(_rtfeldman$elm_css$Css$sansSerif),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_rtfeldman$elm_css$Css$margin2,
+													_rtfeldman$elm_css$Css$px(12),
+													_rtfeldman$elm_css$Css$zero),
+												_1: {
+													ctor: '::',
+													_0: _rtfeldman$elm_css$Css$lineHeight(
+														_rtfeldman$elm_css$Css$px(21)),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled$text(acc.content),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_lang$virtual_dom$Impl_ElmCss$Accordion = F2(
+	function (a, b) {
+		return {heading: a, content: b};
+	});
+
+var _elm_lang$virtual_dom$Impl_HtmlCss$css = '\n.page {\n    padding: 12px;\n}\n.header-button-row {\n    margin: 8px 0;\n}\n\n.header-button-row button {\n    margin: 0 4px;\n}\n.wrapper {\n    padding: 32px;\n}\n.accordion .header {\n    cursor: pointer;\n    margin: 0;\n    font-family: Arial, sans-serif;\n    font-weight: 400;\n    border: solid 1px #aaa;\n    background: #eee;\n    padding: 8px;\n    font-size: 20px;\n    line-height: 20px;\n}\n.accordion .header:hover {\n    border-color: #666;\n}\n\n.accordion .content {\n    overflow: hidden;\n    height: 0;\n    font-family: Arial, sans-serif;\n    margin: 12px 0;\n    line-height: 21px;\n}\n\n.accordion .content.open {\n    height: auto;\n}\n';
+var _elm_lang$virtual_dom$Impl_HtmlCss$renderAccordion = F3(
+	function (openMsg, isOpen, acc) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('accordion'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(openMsg),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('header'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(acc.heading),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('content'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$classList(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'open', _1: isOpen},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(acc.content),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_lang$virtual_dom$Impl_HtmlCss$Accordion = F2(
+	function (a, b) {
+		return {heading: a, content: b};
+	});
+
+var _elm_lang$virtual_dom$Impl_HtmlInline$renderAccordion = F3(
+	function (openMsg, isOpen, acc) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(openMsg),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'pointer'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Arial, sans-serif'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'background', _1: '#eee'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'padding', _1: '8px'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'font-weight', _1: '400'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'font-size', _1: '20px'},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid 1px #aaa'},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'line-height', _1: '20px'},
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(acc.heading),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: isOpen ? {ctor: '_Tuple2', _0: 'height', _1: 'auto'} : {ctor: '_Tuple2', _0: 'height', _1: '0'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Arial, sans-serif'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'margin', _1: '12px 0'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'line-height', _1: '21px'},
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(acc.content),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_lang$virtual_dom$Impl_HtmlInline$Accordion = F2(
+	function (a, b) {
+		return {heading: a, content: b};
+	});
+
 var _mdgriffith$stylish_elephants$Internal_Style$overrides = '@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {\n  .se.row > .se { flex-basis: auto !important; }\n  .se.row > .se.container { flex-basis: auto !important; }\n}';
 var _mdgriffith$stylish_elephants$Internal_Style$dot = function (c) {
 	return A2(_elm_lang$core$Basics_ops['++'], '.', c);
@@ -22490,2333 +24985,7 @@ var _mdgriffith$stylish_elephants$Element_Region$navigation = _mdgriffith$stylis
 var _mdgriffith$stylish_elephants$Element_Region$aside = _mdgriffith$stylish_elephants$Internal_Model$Describe(_mdgriffith$stylish_elephants$Internal_Model$Complementary);
 var _mdgriffith$stylish_elephants$Element_Region$mainContent = _mdgriffith$stylish_elephants$Internal_Model$Describe(_mdgriffith$stylish_elephants$Internal_Model$Main);
 
-var _rtfeldman$elm_css$Css_Structure_Output$noIndent = '';
-var _rtfeldman$elm_css$Css_Structure_Output$spaceIndent = '    ';
-var _rtfeldman$elm_css$Css_Structure_Output$indent = function (str) {
-	return A2(_elm_lang$core$Basics_ops['++'], _rtfeldman$elm_css$Css_Structure_Output$spaceIndent, str);
-};
-var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperty = function (_p0) {
-	var _p1 = _p0;
-	var suffix = _p1.important ? ' !important;' : ';';
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		_p1.key,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			': ',
-			A2(_elm_lang$core$Basics_ops['++'], _p1.value, suffix)));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperties = function (properties) {
-	return A2(
-		_elm_lang$core$String$join,
-		'\n',
-		A2(
-			_elm_lang$core$List$map,
-			function (_p2) {
-				return _rtfeldman$elm_css$Css_Structure_Output$indent(
-					_rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperty(_p2));
-			},
-			properties));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$combinatorToString = function (combinator) {
-	var _p3 = combinator;
-	switch (_p3.ctor) {
-		case 'AdjacentSibling':
-			return '+';
-		case 'GeneralSibling':
-			return '~';
-		case 'Child':
-			return '>';
-		default:
-			return '';
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$pseudoElementToString = function (_p4) {
-	var _p5 = _p4;
-	return A2(_elm_lang$core$Basics_ops['++'], '::', _p5._0);
-};
-var _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString = function (repeatableSimpleSelector) {
-	var _p6 = repeatableSimpleSelector;
-	switch (_p6.ctor) {
-		case 'ClassSelector':
-			return A2(_elm_lang$core$Basics_ops['++'], '.', _p6._0);
-		case 'IdSelector':
-			return A2(_elm_lang$core$Basics_ops['++'], '#', _p6._0);
-		default:
-			return A2(_elm_lang$core$Basics_ops['++'], ':', _p6._0);
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString = function (simpleSelectorSequence) {
-	var _p7 = simpleSelectorSequence;
-	switch (_p7.ctor) {
-		case 'TypeSelectorSequence':
-			return A2(
-				_elm_lang$core$String$join,
-				'',
-				{
-					ctor: '::',
-					_0: _p7._0._0,
-					_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p7._1)
-				});
-		case 'UniversalSelectorSequence':
-			var _p8 = _p7._0;
-			return _elm_lang$core$List$isEmpty(_p8) ? '*' : A2(
-				_elm_lang$core$String$join,
-				'',
-				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p8));
-		default:
-			return A2(
-				_elm_lang$core$String$join,
-				'',
-				{
-					ctor: '::',
-					_0: _p7._0,
-					_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$repeatableSimpleSelectorToString, _p7._1)
-				});
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$selectorChainToString = function (_p9) {
-	var _p10 = _p9;
-	return A2(
-		_elm_lang$core$String$join,
-		' ',
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure_Output$combinatorToString(_p10._0),
-			_1: {
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString(_p10._1),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _rtfeldman$elm_css$Css_Structure_Output$selectorToString = function (_p11) {
-	var _p12 = _p11;
-	var pseudoElementsString = A2(
-		_elm_lang$core$String$join,
-		'',
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$core$Maybe$withDefault,
-				'',
-				A2(_elm_lang$core$Maybe$map, _rtfeldman$elm_css$Css_Structure_Output$pseudoElementToString, _p12._2)),
-			_1: {ctor: '[]'}
-		});
-	var segments = A2(
-		_elm_lang$core$Basics_ops['++'],
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure_Output$simpleSelectorSequenceToString(_p12._0),
-			_1: {ctor: '[]'}
-		},
-		A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$selectorChainToString, _p12._1));
-	return A3(
-		_elm_lang$core$Basics$flip,
-		F2(
-			function (x, y) {
-				return A2(_elm_lang$core$Basics_ops['++'], x, y);
-			}),
-		pseudoElementsString,
-		A2(
-			_elm_lang$core$String$join,
-			' ',
-			A2(
-				_elm_lang$core$List$filter,
-				function (_p13) {
-					return !_elm_lang$core$String$isEmpty(_p13);
-				},
-				segments)));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString = function (expression) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		'(',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			expression.feature,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				A2(
-					_elm_lang$core$Maybe$withDefault,
-					'',
-					A2(
-						_elm_lang$core$Maybe$map,
-						F2(
-							function (x, y) {
-								return A2(_elm_lang$core$Basics_ops['++'], x, y);
-							})(': '),
-						expression.value)),
-				')')));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$mediaTypeToString = function (mediaType) {
-	var _p14 = mediaType;
-	switch (_p14.ctor) {
-		case 'Print':
-			return 'print';
-		case 'Screen':
-			return 'screen';
-		default:
-			return 'speech';
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$mediaQueryToString = function (mediaQuery) {
-	var prefixWith = F3(
-		function (str, mediaType, expressions) {
-			return A2(
-				_elm_lang$core$Basics_ops['++'],
-				str,
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					' ',
-					A2(
-						_elm_lang$core$String$join,
-						' and ',
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css_Structure_Output$mediaTypeToString(mediaType),
-							_1: A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString, expressions)
-						})));
-		});
-	var _p15 = mediaQuery;
-	switch (_p15.ctor) {
-		case 'AllQuery':
-			return A2(
-				_elm_lang$core$String$join,
-				' and ',
-				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaExpressionToString, _p15._0));
-		case 'OnlyQuery':
-			return A3(prefixWith, 'only', _p15._0, _p15._1);
-		case 'NotQuery':
-			return A3(prefixWith, 'not', _p15._0, _p15._1);
-		default:
-			return _p15._0;
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock = F2(
-	function (indentLevel, _p16) {
-		var _p17 = _p16;
-		var selectorStr = A2(
-			_elm_lang$core$String$join,
-			', ',
-			A2(
-				_elm_lang$core$List$map,
-				_rtfeldman$elm_css$Css_Structure_Output$selectorToString,
-				{ctor: '::', _0: _p17._0, _1: _p17._1}));
-		return A2(
-			_elm_lang$core$String$join,
-			'',
-			{
-				ctor: '::',
-				_0: selectorStr,
-				_1: {
-					ctor: '::',
-					_0: ' {\n',
-					_1: {
-						ctor: '::',
-						_0: indentLevel,
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css_Structure_Output$prettyPrintProperties(_p17._2),
-							_1: {
-								ctor: '::',
-								_0: '\n',
-								_1: {
-									ctor: '::',
-									_0: indentLevel,
-									_1: {
-										ctor: '::',
-										_0: '}',
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			});
-	});
-var _rtfeldman$elm_css$Css_Structure_Output$prettyPrintDeclaration = function (declaration) {
-	var _p18 = declaration;
-	switch (_p18.ctor) {
-		case 'StyleBlockDeclaration':
-			return A2(_rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock, _rtfeldman$elm_css$Css_Structure_Output$noIndent, _p18._0);
-		case 'MediaRule':
-			var query = A2(
-				_elm_lang$core$String$join,
-				',\n',
-				A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$mediaQueryToString, _p18._0));
-			var blocks = A2(
-				_elm_lang$core$String$join,
-				'\n\n',
-				A2(
-					_elm_lang$core$List$map,
-					function (_p19) {
-						return _rtfeldman$elm_css$Css_Structure_Output$indent(
-							A2(_rtfeldman$elm_css$Css_Structure_Output$prettyPrintStyleBlock, _rtfeldman$elm_css$Css_Structure_Output$spaceIndent, _p19));
-					},
-					_p18._1));
-			return A2(
-				_elm_lang$core$Basics_ops['++'],
-				'@media ',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					query,
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' {\n',
-						A2(_elm_lang$core$Basics_ops['++'], blocks, '\n}'))));
-		default:
-			return _elm_lang$core$Native_Utils.crashCase(
-				'Css.Structure.Output',
-				{
-					start: {line: 61, column: 5},
-					end: {line: 78, column: 49}
-				},
-				_p18)('not yet implemented :x');
-	}
-};
-var _rtfeldman$elm_css$Css_Structure_Output$namespaceToString = function (_p21) {
-	var _p22 = _p21;
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		'@namespace ',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_p22._0,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'\"',
-				A2(_elm_lang$core$Basics_ops['++'], _p22._1, '\"'))));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$importToString = function (_p23) {
-	var _p24 = _p23;
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		'@import \"',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_p24._0,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(_p24._1),
-				'\"')));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$charsetToString = function (charset) {
-	return A2(
-		_elm_lang$core$Maybe$withDefault,
-		'',
-		A2(
-			_elm_lang$core$Maybe$map,
-			function (str) {
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					'@charset \"',
-					A2(_elm_lang$core$Basics_ops['++'], str, '\"'));
-			},
-			charset));
-};
-var _rtfeldman$elm_css$Css_Structure_Output$prettyPrint = function (_p25) {
-	var _p26 = _p25;
-	return A2(
-		_elm_lang$core$String$join,
-		'\n\n',
-		A2(
-			_elm_lang$core$List$filter,
-			function (_p27) {
-				return !_elm_lang$core$String$isEmpty(_p27);
-			},
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css_Structure_Output$charsetToString(_p26.charset),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$String$join,
-						'\n',
-						A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$importToString, _p26.imports)),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$core$String$join,
-							'\n',
-							A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$namespaceToString, _p26.namespaces)),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$core$String$join,
-								'\n\n',
-								A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure_Output$prettyPrintDeclaration, _p26.declarations)),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}));
-};
-
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$oneOf = function (maybes) {
-	oneOf:
-	while (true) {
-		var _p0 = maybes;
-		if (_p0.ctor === '[]') {
-			return _elm_lang$core$Maybe$Nothing;
-		} else {
-			var _p2 = _p0._0;
-			var _p1 = _p2;
-			if (_p1.ctor === 'Nothing') {
-				var _v2 = _p0._1;
-				maybes = _v2;
-				continue oneOf;
-			} else {
-				return _p2;
-			}
-		}
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors = function (declarations) {
-	collectSelectors:
-	while (true) {
-		var _p3 = declarations;
-		if (_p3.ctor === '[]') {
-			return {ctor: '[]'};
-		} else {
-			if (_p3._0.ctor === 'StyleBlockDeclaration') {
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					{ctor: '::', _0: _p3._0._0._0, _1: _p3._0._0._1},
-					_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(_p3._1));
-			} else {
-				var _v4 = _p3._1;
-				declarations = _v4;
-				continue collectSelectors;
-			}
-		}
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning = function (_p4) {
-	var _p5 = _p4;
-	return {
-		ctor: '_Tuple2',
-		_0: _p5.warnings,
-		_1: {key: _p5.key, value: _p5.value, important: _p5.important}
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings = function (properties) {
-	return {
-		ctor: '_Tuple2',
-		_0: A2(
-			_elm_lang$core$List$concatMap,
-			function (_) {
-				return _.warnings;
-			},
-			properties),
-		_1: A2(
-			_elm_lang$core$List$map,
-			function (prop) {
-				return _elm_lang$core$Tuple$second(
-					_rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(prop));
-			},
-			properties)
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule = F5(
-	function (str1, str2, str3, str4, declaration) {
-		var _p6 = declaration;
-		if (_p6.ctor === 'StyleBlockDeclaration') {
-			return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, str1, str2, str3, str4, _p6._0);
-		} else {
-			return declaration;
-		}
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration = function (declarations) {
-	lastDeclaration:
-	while (true) {
-		var _p7 = declarations;
-		if (_p7.ctor === '[]') {
-			return _elm_lang$core$Maybe$Nothing;
-		} else {
-			if (_p7._1.ctor === '[]') {
-				return _elm_lang$core$Maybe$Just(
-					{
-						ctor: '::',
-						_0: _p7._0,
-						_1: {ctor: '[]'}
-					});
-			} else {
-				var _v8 = _p7._1;
-				declarations = _v8;
-				continue lastDeclaration;
-			}
-		}
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings = function (declarationsAndWarnings) {
-	var _p8 = declarationsAndWarnings;
-	if (_p8.ctor === '[]') {
-		return {
-			declarations: {ctor: '[]'},
-			warnings: {ctor: '[]'}
-		};
-	} else {
-		var result = _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(_p8._1);
-		return {
-			declarations: A2(_elm_lang$core$Basics_ops['++'], _p8._0.declarations, result.declarations),
-			warnings: A2(_elm_lang$core$Basics_ops['++'], _p8._0.warnings, result.warnings)
-		};
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues = function (tuples) {
-	var expandTuples = function (tuplesToExpand) {
-		var _p9 = tuplesToExpand;
-		if (_p9.ctor === '[]') {
-			return {
-				ctor: '_Tuple2',
-				_0: {ctor: '[]'},
-				_1: {ctor: '[]'}
-			};
-		} else {
-			var _p10 = expandTuples(_p9._1);
-			var nextWarnings = _p10._0;
-			var nextTuples = _p10._1;
-			var _p11 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(_p9._0._1);
-			var warnings = _p11._0;
-			var properties = _p11._1;
-			return {
-				ctor: '_Tuple2',
-				_0: A2(_elm_lang$core$Basics_ops['++'], warnings, nextWarnings),
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: _p9._0._0, _1: properties},
-					_1: nextTuples
-				}
-			};
-		}
-	};
-	var _p12 = expandTuples(tuples);
-	var warnings = _p12._0;
-	var newTuples = _p12._1;
-	return {
-		declarations: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure$FontFeatureValues(newTuples),
-			_1: {ctor: '[]'}
-		},
-		warnings: warnings
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle = function (counterStyleProperties) {
-	var _p13 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(counterStyleProperties);
-	var warnings = _p13._0;
-	var properties = _p13._1;
-	return {
-		declarations: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure$Viewport(properties),
-			_1: {ctor: '[]'}
-		},
-		warnings: warnings
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport = function (viewportProperties) {
-	var _p14 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(viewportProperties);
-	var warnings = _p14._0;
-	var properties = _p14._1;
-	return {
-		declarations: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure$Viewport(properties),
-			_1: {ctor: '[]'}
-		},
-		warnings: warnings
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes = F2(
-	function (str, properties) {
-		return {
-			declarations: {
-				ctor: '::',
-				_0: A2(_rtfeldman$elm_css$Css_Structure$Keyframes, str, properties),
-				_1: {ctor: '[]'}
-			},
-			warnings: {ctor: '[]'}
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace = function (fontFaceProperties) {
-	var _p15 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(fontFaceProperties);
-	var warnings = _p15._0;
-	var properties = _p15._1;
-	return {
-		declarations: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure$FontFace(properties),
-			_1: {ctor: '[]'}
-		},
-		warnings: warnings
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule = F2(
-	function (str, pageRuleProperties) {
-		var _p16 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(pageRuleProperties);
-		var warnings = _p16._0;
-		var properties = _p16._1;
-		return {
-			declarations: {
-				ctor: '::',
-				_0: A2(_rtfeldman$elm_css$Css_Structure$PageRule, str, properties),
-				_1: {ctor: '[]'}
-			},
-			warnings: warnings
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule = F2(
-	function (mediaQueries, declaration) {
-		var _p17 = declaration;
-		switch (_p17.ctor) {
-			case 'StyleBlockDeclaration':
-				return A2(
-					_rtfeldman$elm_css$Css_Structure$MediaRule,
-					mediaQueries,
-					{
-						ctor: '::',
-						_0: _p17._0,
-						_1: {ctor: '[]'}
-					});
-			case 'MediaRule':
-				return A2(
-					_rtfeldman$elm_css$Css_Structure$MediaRule,
-					A2(_elm_lang$core$Basics_ops['++'], mediaQueries, _p17._0),
-					_p17._1);
-			case 'SupportsRule':
-				return A2(
-					_rtfeldman$elm_css$Css_Structure$SupportsRule,
-					_p17._0,
-					A2(
-						_elm_lang$core$List$map,
-						_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
-						_p17._1));
-			case 'DocumentRule':
-				return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p17._0, _p17._1, _p17._2, _p17._3, _p17._4);
-			case 'PageRule':
-				return declaration;
-			case 'FontFace':
-				return declaration;
-			case 'Keyframes':
-				return declaration;
-			case 'Viewport':
-				return declaration;
-			case 'CounterStyle':
-				return declaration;
-			default:
-				return declaration;
-		}
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule = F2(
-	function (mediaQueries, styleBlocks) {
-		var handleStyleBlock = function (styleBlock) {
-			var _p18 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
-			var declarations = _p18.declarations;
-			var warnings = _p18.warnings;
-			return {
-				declarations: A2(
-					_elm_lang$core$List$map,
-					_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
-					declarations),
-				warnings: warnings
-			};
-		};
-		var results = A2(_elm_lang$core$List$map, handleStyleBlock, styleBlocks);
-		return {
-			warnings: A2(
-				_elm_lang$core$List$concatMap,
-				function (_) {
-					return _.warnings;
-				},
-				results),
-			declarations: A2(
-				_elm_lang$core$List$concatMap,
-				function (_) {
-					return _.declarations;
-				},
-				results)
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock = function (_p19) {
-	var _p20 = _p19;
-	return A2(
-		_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
-		_p20._2,
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
-				A3(
-					_rtfeldman$elm_css$Css_Structure$StyleBlock,
-					_p20._0,
-					_p20._1,
-					{ctor: '[]'})),
-			_1: {ctor: '[]'}
-		});
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles = F2(
-	function (styles, declarations) {
-		applyStyles:
-		while (true) {
-			var _p21 = styles;
-			if (_p21.ctor === '[]') {
-				return {
-					declarations: declarations,
-					warnings: {ctor: '[]'}
-				};
-			} else {
-				switch (_p21._0.ctor) {
-					case 'AppendProperty':
-						var _p22 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(_p21._0._0);
-						var warnings = _p22._0;
-						var property = _p22._1;
-						var result = A2(
-							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
-							_p21._1,
-							A2(_rtfeldman$elm_css$Css_Structure$appendProperty, property, declarations));
-						return {
-							declarations: result.declarations,
-							warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, result.warnings)
-						};
-					case 'ExtendSelector':
-						return A4(
-							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast,
-							_p21._0._1,
-							_p21._1,
-							_rtfeldman$elm_css$Css_Structure$appendRepeatableToLastSelector(_p21._0._0),
-							declarations);
-					case 'NestSnippet':
-						var chain = F2(
-							function (_p24, _p23) {
-								var _p25 = _p24;
-								var _p26 = _p23;
-								return A3(
-									_rtfeldman$elm_css$Css_Structure$Selector,
-									_p25._0,
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										_p25._1,
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: _p21._0._0, _1: _p26._0},
-											_1: _p26._1
-										}),
-									_rtfeldman$elm_css$Css_Preprocess_Resolve$oneOf(
-										{
-											ctor: '::',
-											_0: _p26._2,
-											_1: {
-												ctor: '::',
-												_0: _p25._2,
-												_1: {ctor: '[]'}
-											}
-										}));
-							});
-						var expandDeclaration = function (declaration) {
-							var _p27 = declaration;
-							switch (_p27.ctor) {
-								case 'StyleBlockDeclaration':
-									var newSelectors = A2(
-										_elm_lang$core$List$concatMap,
-										function (originalSelector) {
-											return A2(
-												_elm_lang$core$List$map,
-												chain(originalSelector),
-												{ctor: '::', _0: _p27._0._0, _1: _p27._0._1});
-										},
-										_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations));
-									var newDeclarations = function () {
-										var _p28 = newSelectors;
-										if (_p28.ctor === '[]') {
-											return {ctor: '[]'};
-										} else {
-											return {
-												ctor: '::',
-												_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
-													A3(
-														_rtfeldman$elm_css$Css_Structure$StyleBlock,
-														_p28._0,
-														_p28._1,
-														{ctor: '[]'})),
-												_1: {ctor: '[]'}
-											};
-										}
-									}();
-									return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
-										{
-											ctor: '::',
-											_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p27._0._2, newDeclarations),
-											_1: {ctor: '[]'}
-										});
-								case 'MediaRule':
-									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p27._0, _p27._1);
-								case 'SupportsRule':
-									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p27._0, _p27._1);
-								case 'DocumentRule':
-									return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p27._0, _p27._1, _p27._2, _p27._3, _p27._4);
-								case 'PageRule':
-									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p27._0, _p27._1);
-								case 'FontFace':
-									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p27._0);
-								case 'Keyframes':
-									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p27._0, _p27._1);
-								case 'Viewport':
-									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p27._0);
-								case 'CounterStyle':
-									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p27._0);
-								default:
-									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p27._0);
-							}
-						};
-						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
-							A2(
-								F2(
-									function (x, y) {
-										return A2(_elm_lang$core$Basics_ops['++'], x, y);
-									}),
-								{
-									ctor: '::',
-									_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._1, declarations),
-									_1: {ctor: '[]'}
-								},
-								A2(
-									_elm_lang$core$List$map,
-									expandDeclaration,
-									A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p21._0._1))));
-					case 'WithPseudoElement':
-						return A4(
-							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast,
-							_p21._0._1,
-							_p21._1,
-							_rtfeldman$elm_css$Css_Structure$appendPseudoElementToLastSelector(_p21._0._0),
-							declarations);
-					case 'WithMedia':
-						var newDeclarations = function () {
-							var _p29 = _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations);
-							if (_p29.ctor === '[]') {
-								return {ctor: '[]'};
-							} else {
-								return {
-									ctor: '::',
-									_0: A2(
-										_rtfeldman$elm_css$Css_Structure$MediaRule,
-										_p21._0._0,
-										{
-											ctor: '::',
-											_0: A3(
-												_rtfeldman$elm_css$Css_Structure$StyleBlock,
-												_p29._0,
-												_p29._1,
-												{ctor: '[]'}),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								};
-							}
-						}();
-						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
-							{
-								ctor: '::',
-								_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._1, declarations),
-								_1: {
-									ctor: '::',
-									_0: A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, _p21._0._1, newDeclarations),
-									_1: {ctor: '[]'}
-								}
-							});
-					default:
-						var _v19 = A2(_elm_lang$core$Basics_ops['++'], _p21._0._0, _p21._1),
-							_v20 = declarations;
-						styles = _v19;
-						declarations = _v20;
-						continue applyStyles;
-				}
-			}
-		}
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedStylesToLast = F4(
-	function (nestedStyles, rest, f, declarations) {
-		var withoutParent = function (decls) {
-			return A2(
-				_elm_lang$core$Maybe$withDefault,
-				{ctor: '[]'},
-				_elm_lang$core$List$tail(decls));
-		};
-		var nextResult = A2(
-			_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles,
-			rest,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				{ctor: '[]'},
-				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
-		var newDeclarations = function () {
-			var _p30 = {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$List$head(nextResult.declarations),
-				_1: _elm_lang$core$List$head(
-					_elm_lang$core$List$reverse(declarations))
-			};
-			if (((_p30.ctor === '_Tuple2') && (_p30._0.ctor === 'Just')) && (_p30._1.ctor === 'Just')) {
-				var _p32 = _p30._1._0;
-				var _p31 = _p30._0._0;
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					A2(
-						_elm_lang$core$List$take,
-						_elm_lang$core$List$length(declarations) - 1,
-						declarations),
-					{
-						ctor: '::',
-						_0: (!_elm_lang$core$Native_Utils.eq(_p32, _p31)) ? _p31 : _p32,
-						_1: {ctor: '[]'}
-					});
-			} else {
-				return declarations;
-			}
-		}();
-		var handleInitial = function (declarationsAndWarnings) {
-			var result = A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyStyles, nestedStyles, declarationsAndWarnings.declarations);
-			return {
-				warnings: A2(_elm_lang$core$Basics_ops['++'], declarationsAndWarnings.warnings, result.warnings),
-				declarations: result.declarations
-			};
-		};
-		var insertStylesToNestedDecl = function (lastDecl) {
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
-				A2(
-					_rtfeldman$elm_css$Css_Structure$mapLast,
-					handleInitial,
-					A2(
-						_elm_lang$core$List$map,
-						function (declaration) {
-							return {
-								declarations: {
-									ctor: '::',
-									_0: declaration,
-									_1: {ctor: '[]'}
-								},
-								warnings: {ctor: '[]'}
-							};
-						},
-						A2(_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock, f, lastDecl))));
-		};
-		var initialResult = A2(
-			_elm_lang$core$Maybe$withDefault,
-			{
-				warnings: {ctor: '[]'},
-				declarations: {ctor: '[]'}
-			},
-			A2(
-				_elm_lang$core$Maybe$map,
-				insertStylesToNestedDecl,
-				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
-		return {
-			warnings: A2(_elm_lang$core$Basics_ops['++'], initialResult.warnings, nextResult.warnings),
-			declarations: A2(
-				_elm_lang$core$Basics_ops['++'],
-				newDeclarations,
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					withoutParent(initialResult.declarations),
-					withoutParent(nextResult.declarations)))
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule = F5(
-	function (str1, str2, str3, str4, styleBlock) {
-		var _p33 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
-		var declarations = _p33.declarations;
-		var warnings = _p33.warnings;
-		return {
-			declarations: A2(
-				_elm_lang$core$List$map,
-				A4(_rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule, str1, str2, str3, str4),
-				declarations),
-			warnings: warnings
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule = F2(
-	function (str, snippets) {
-		var _p34 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
-			A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, snippets));
-		var declarations = _p34.declarations;
-		var warnings = _p34.warnings;
-		return {
-			declarations: {
-				ctor: '::',
-				_0: A2(_rtfeldman$elm_css$Css_Structure$SupportsRule, str, declarations),
-				_1: {ctor: '[]'}
-			},
-			warnings: warnings
-		};
-	});
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$extract = function (snippetDeclarations) {
-	var _p35 = snippetDeclarations;
-	if (_p35.ctor === '[]') {
-		return {
-			declarations: {ctor: '[]'},
-			warnings: {ctor: '[]'}
-		};
-	} else {
-		var _p36 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations(_p35._0);
-		var declarations = _p36.declarations;
-		var warnings = _p36.warnings;
-		var nextResult = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(_p35._1);
-		return {
-			declarations: A2(_elm_lang$core$Basics_ops['++'], declarations, nextResult.declarations),
-			warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, nextResult.warnings)
-		};
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations = function (snippetDeclaration) {
-	var _p37 = snippetDeclaration;
-	switch (_p37.ctor) {
-		case 'StyleBlockDeclaration':
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(_p37._0);
-		case 'MediaRule':
-			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p37._0, _p37._1);
-		case 'SupportsRule':
-			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p37._0, _p37._1);
-		case 'DocumentRule':
-			return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p37._0, _p37._1, _p37._2, _p37._3, _p37._4);
-		case 'PageRule':
-			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p37._0, _p37._1);
-		case 'FontFace':
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p37._0);
-		case 'Keyframes':
-			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p37._0, _p37._1);
-		case 'Viewport':
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p37._0);
-		case 'CounterStyle':
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p37._0);
-		default:
-			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p37._0);
-	}
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure = function (_p38) {
-	var _p39 = _p38;
-	var _p40 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
-		A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p39.snippets));
-	var warnings = _p40.warnings;
-	var declarations = _p40.declarations;
-	return {
-		ctor: '_Tuple2',
-		_0: {charset: _p39.charset, imports: _p39.imports, namespaces: _p39.namespaces, declarations: declarations},
-		_1: warnings
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1 = function (sheet) {
-	var _p41 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure(sheet);
-	var structureStylesheet = _p41._0;
-	var warnings = _p41._1;
-	return {
-		warnings: warnings,
-		css: _rtfeldman$elm_css$Css_Structure_Output$prettyPrint(
-			_rtfeldman$elm_css$Css_Structure$dropEmpty(structureStylesheet))
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile = function (styles) {
-	var results = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1, styles);
-	return {
-		warnings: A2(
-			_elm_lang$core$List$concatMap,
-			function (_) {
-				return _.warnings;
-			},
-			results),
-		css: A2(
-			_elm_lang$core$String$join,
-			'\n\n',
-			A2(
-				_elm_lang$core$List$map,
-				function (_) {
-					return _.css;
-				},
-				results))
-	};
-};
-var _rtfeldman$elm_css$Css_Preprocess_Resolve$DeclarationsAndWarnings = F2(
-	function (a, b) {
-		return {declarations: a, warnings: b};
-	});
-
-var _rtfeldman$elm_css$VirtualDom_Styled$containsKey = F2(
-	function (key, pairs) {
-		containsKey:
-		while (true) {
-			var _p0 = pairs;
-			if (_p0.ctor === '[]') {
-				return false;
-			} else {
-				if (_elm_lang$core$Native_Utils.eq(key, _p0._0._0)) {
-					return true;
-				} else {
-					var _v1 = key,
-						_v2 = _p0._1;
-					key = _v1;
-					pairs = _v2;
-					continue containsKey;
-				}
-			}
-		}
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$getUnusedKey = F2(
-	function ($default, pairs) {
-		getUnusedKey:
-		while (true) {
-			var _p1 = pairs;
-			if (_p1.ctor === '[]') {
-				return $default;
-			} else {
-				var _p2 = _p1._1;
-				var newKey = A2(_elm_lang$core$Basics_ops['++'], '_', _p1._0._0);
-				if (A2(_rtfeldman$elm_css$VirtualDom_Styled$containsKey, newKey, _p2)) {
-					var _v4 = newKey,
-						_v5 = _p2;
-					$default = _v4;
-					pairs = _v5;
-					continue getUnusedKey;
-				} else {
-					return newKey;
-				}
-			}
-		}
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty = function (_p3) {
-	var _p4 = _p3;
-	return _p4._0;
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$stylesFromPropertiesHelp = F2(
-	function (candidate, properties) {
-		stylesFromPropertiesHelp:
-		while (true) {
-			var _p5 = properties;
-			if (_p5.ctor === '[]') {
-				return candidate;
-			} else {
-				var _p7 = _p5._1;
-				var _p6 = _p5._0._2;
-				if (_elm_lang$core$String$isEmpty(_p6)) {
-					var _v8 = candidate,
-						_v9 = _p7;
-					candidate = _v8;
-					properties = _v9;
-					continue stylesFromPropertiesHelp;
-				} else {
-					var _v10 = _elm_lang$core$Maybe$Just(
-						{ctor: '_Tuple2', _0: _p6, _1: _p5._0._1}),
-						_v11 = _p7;
-					candidate = _v10;
-					properties = _v11;
-					continue stylesFromPropertiesHelp;
-				}
-			}
-		}
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties = function (properties) {
-	var _p8 = A2(_rtfeldman$elm_css$VirtualDom_Styled$stylesFromPropertiesHelp, _elm_lang$core$Maybe$Nothing, properties);
-	if (_p8.ctor === 'Nothing') {
-		return _elm_lang$core$Dict$empty;
-	} else {
-		return A2(_elm_lang$core$Dict$singleton, _p8._0._0, _p8._0._1);
-	}
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles = F2(
-	function (_p9, styles) {
-		var _p10 = _p9;
-		var _p11 = _p10._1;
-		return _elm_lang$core$List$isEmpty(_p11) ? styles : A3(_elm_lang$core$Dict$insert, _p10._2, _p11, styles);
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml = F2(
-	function (_p13, _p12) {
-		var _p14 = _p13;
-		var _p23 = _p14._0;
-		var _p15 = _p12;
-		var _p22 = _p15._1;
-		var _p21 = _p15._0;
-		var _p16 = _p14._1;
-		switch (_p16.ctor) {
-			case 'Unstyled':
-				return {
-					ctor: '_Tuple2',
-					_0: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: _p23, _1: _p16._0},
-						_1: _p21
-					},
-					_1: _p22
-				};
-			case 'Element':
-				var _p18 = _p16._1;
-				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p22, _p18);
-				var _p17 = A3(
-					_elm_lang$core$List$foldl,
-					_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
-					{
-						ctor: '_Tuple2',
-						_0: {ctor: '[]'},
-						_1: combinedStyles
-					},
-					_p16._2);
-				var childNodes = _p17._0;
-				var finalStyles = _p17._1;
-				var vdom = A3(
-					_elm_lang$virtual_dom$VirtualDom$node,
-					_p16._0,
-					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p18),
-					_elm_lang$core$List$reverse(childNodes));
-				return {
-					ctor: '_Tuple2',
-					_0: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: _p23, _1: vdom},
-						_1: _p21
-					},
-					_1: finalStyles
-				};
-			default:
-				var _p20 = _p16._1;
-				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p22, _p20);
-				var _p19 = A3(
-					_elm_lang$core$List$foldl,
-					_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
-					{
-						ctor: '_Tuple2',
-						_0: {ctor: '[]'},
-						_1: combinedStyles
-					},
-					_p16._2);
-				var childNodes = _p19._0;
-				var finalStyles = _p19._1;
-				var vdom = A3(
-					_elm_lang$virtual_dom$VirtualDom$keyedNode,
-					_p16._0,
-					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p20),
-					_elm_lang$core$List$reverse(childNodes));
-				return {
-					ctor: '_Tuple2',
-					_0: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: _p23, _1: vdom},
-						_1: _p21
-					},
-					_1: finalStyles
-				};
-		}
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml = F2(
-	function (html, _p24) {
-		var _p25 = _p24;
-		var _p32 = _p25._1;
-		var _p31 = _p25._0;
-		var _p26 = html;
-		switch (_p26.ctor) {
-			case 'Unstyled':
-				return {
-					ctor: '_Tuple2',
-					_0: {ctor: '::', _0: _p26._0, _1: _p31},
-					_1: _p32
-				};
-			case 'Element':
-				var _p28 = _p26._1;
-				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p32, _p28);
-				var _p27 = A3(
-					_elm_lang$core$List$foldl,
-					_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
-					{
-						ctor: '_Tuple2',
-						_0: {ctor: '[]'},
-						_1: combinedStyles
-					},
-					_p26._2);
-				var childNodes = _p27._0;
-				var finalStyles = _p27._1;
-				var node = A3(
-					_elm_lang$virtual_dom$VirtualDom$node,
-					_p26._0,
-					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p28),
-					_elm_lang$core$List$reverse(childNodes));
-				return {
-					ctor: '_Tuple2',
-					_0: {ctor: '::', _0: node, _1: _p31},
-					_1: finalStyles
-				};
-			default:
-				var _p30 = _p26._1;
-				var combinedStyles = A3(_elm_lang$core$List$foldl, _rtfeldman$elm_css$VirtualDom_Styled$accumulateStyles, _p32, _p30);
-				var _p29 = A3(
-					_elm_lang$core$List$foldl,
-					_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
-					{
-						ctor: '_Tuple2',
-						_0: {ctor: '[]'},
-						_1: combinedStyles
-					},
-					_p26._2);
-				var childNodes = _p29._0;
-				var finalStyles = _p29._1;
-				var node = A3(
-					_elm_lang$virtual_dom$VirtualDom$keyedNode,
-					_p26._0,
-					A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, _p30),
-					_elm_lang$core$List$reverse(childNodes));
-				return {
-					ctor: '_Tuple2',
-					_0: {ctor: '::', _0: node, _1: _p31},
-					_1: finalStyles
-				};
-		}
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$murmurSeed = 15739;
-var _rtfeldman$elm_css$VirtualDom_Styled$makeSnippet = F2(
-	function (styles, sequence) {
-		var selector = A3(
-			_rtfeldman$elm_css$Css_Structure$Selector,
-			sequence,
-			{ctor: '[]'},
-			_elm_lang$core$Maybe$Nothing);
-		return _rtfeldman$elm_css$Css_Preprocess$Snippet(
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css_Preprocess$StyleBlockDeclaration(
-					A3(
-						_rtfeldman$elm_css$Css_Preprocess$StyleBlock,
-						selector,
-						{ctor: '[]'},
-						styles)),
-				_1: {ctor: '[]'}
-			});
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$snippetFromPair = function (_p33) {
-	var _p34 = _p33;
-	return A2(
-		_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-		_p34._1,
-		_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css_Structure$ClassSelector(_p34._0),
-				_1: {ctor: '[]'}
-			}));
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$toDeclaration = function (dict) {
-	return function (_) {
-		return _.css;
-	}(
-		_rtfeldman$elm_css$Css_Preprocess_Resolve$compile(
-			_elm_lang$core$List$singleton(
-				_rtfeldman$elm_css$Css_Preprocess$stylesheet(
-					A2(
-						_elm_lang$core$List$map,
-						_rtfeldman$elm_css$VirtualDom_Styled$snippetFromPair,
-						_elm_lang$core$Dict$toList(dict))))));
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode = function (styles) {
-	return A3(
-		_elm_lang$virtual_dom$VirtualDom$node,
-		'style',
-		{ctor: '[]'},
-		_elm_lang$core$List$singleton(
-			_elm_lang$virtual_dom$VirtualDom$text(
-				_rtfeldman$elm_css$VirtualDom_Styled$toDeclaration(styles))));
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$unstyle = F3(
-	function (elemType, properties, children) {
-		var unstyledProperties = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, properties);
-		var initialStyles = _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties(properties);
-		var _p35 = A3(
-			_elm_lang$core$List$foldl,
-			_rtfeldman$elm_css$VirtualDom_Styled$accumulateStyledHtml,
-			{
-				ctor: '_Tuple2',
-				_0: {ctor: '[]'},
-				_1: initialStyles
-			},
-			children);
-		var childNodes = _p35._0;
-		var styles = _p35._1;
-		var styleNode = _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode(styles);
-		return A3(
-			_elm_lang$virtual_dom$VirtualDom$node,
-			elemType,
-			unstyledProperties,
-			{
-				ctor: '::',
-				_0: styleNode,
-				_1: _elm_lang$core$List$reverse(childNodes)
-			});
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$toKeyedStyleNode = F2(
-	function (allStyles, keyedChildNodes) {
-		var finalNode = _rtfeldman$elm_css$VirtualDom_Styled$toStyleNode(allStyles);
-		var styleNodeKey = A2(_rtfeldman$elm_css$VirtualDom_Styled$getUnusedKey, '_', keyedChildNodes);
-		return {ctor: '_Tuple2', _0: styleNodeKey, _1: finalNode};
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$unstyleKeyed = F3(
-	function (elemType, properties, keyedChildren) {
-		var unstyledProperties = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$VirtualDom_Styled$extractUnstyledProperty, properties);
-		var initialStyles = _rtfeldman$elm_css$VirtualDom_Styled$stylesFromProperties(properties);
-		var _p36 = A3(
-			_elm_lang$core$List$foldl,
-			_rtfeldman$elm_css$VirtualDom_Styled$accumulateKeyedStyledHtml,
-			{
-				ctor: '_Tuple2',
-				_0: {ctor: '[]'},
-				_1: initialStyles
-			},
-			keyedChildren);
-		var keyedChildNodes = _p36._0;
-		var styles = _p36._1;
-		var keyedStyleNode = A2(_rtfeldman$elm_css$VirtualDom_Styled$toKeyedStyleNode, styles, keyedChildNodes);
-		return A3(
-			_elm_lang$virtual_dom$VirtualDom$keyedNode,
-			elemType,
-			unstyledProperties,
-			{
-				ctor: '::',
-				_0: keyedStyleNode,
-				_1: _elm_lang$core$List$reverse(keyedChildNodes)
-			});
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$getClassname = function (styles) {
-	return _elm_lang$core$List$isEmpty(styles) ? 'unstyled' : A2(
-		_elm_lang$core$String$cons,
-		_elm_lang$core$Native_Utils.chr('_'),
-		_rtfeldman$hex$Hex$toString(
-			A2(
-				_Skinney$murmur3$Murmur3$hashString,
-				_rtfeldman$elm_css$VirtualDom_Styled$murmurSeed,
-				function (_) {
-					return _.css;
-				}(
-					_rtfeldman$elm_css$Css_Preprocess_Resolve$compile(
-						_elm_lang$core$List$singleton(
-							_rtfeldman$elm_css$Css_Preprocess$stylesheet(
-								_elm_lang$core$List$singleton(
-									A2(
-										_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-										styles,
-										_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
-											{ctor: '[]'}))))))))));
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$toUnstyled = function (node) {
-	var _p37 = node;
-	switch (_p37.ctor) {
-		case 'Unstyled':
-			return _p37._0;
-		case 'Element':
-			return A3(_rtfeldman$elm_css$VirtualDom_Styled$unstyle, _p37._0, _p37._1, _p37._2);
-		default:
-			return A3(_rtfeldman$elm_css$VirtualDom_Styled$unstyleKeyed, _p37._0, _p37._1, _p37._2);
-	}
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$Unstyled = function (a) {
-	return {ctor: 'Unstyled', _0: a};
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$unstyledNode = _rtfeldman$elm_css$VirtualDom_Styled$Unstyled;
-var _rtfeldman$elm_css$VirtualDom_Styled$text = function (_p38) {
-	return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
-		_elm_lang$virtual_dom$VirtualDom$text(_p38));
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$lazy = F2(
-	function (fn, arg) {
-		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
-			A2(_elm_lang$virtual_dom$VirtualDom$lazy, fn, arg));
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$lazy2 = F3(
-	function (fn, arg1, arg2) {
-		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
-			A3(_elm_lang$virtual_dom$VirtualDom$lazy2, fn, arg1, arg2));
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$lazy3 = F4(
-	function (fn, arg1, arg2, arg3) {
-		return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
-			A4(_elm_lang$virtual_dom$VirtualDom$lazy3, fn, arg1, arg2, arg3));
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$KeyedElement = F3(
-	function (a, b, c) {
-		return {ctor: 'KeyedElement', _0: a, _1: b, _2: c};
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$keyedNode = _rtfeldman$elm_css$VirtualDom_Styled$KeyedElement;
-var _rtfeldman$elm_css$VirtualDom_Styled$Element = F3(
-	function (a, b, c) {
-		return {ctor: 'Element', _0: a, _1: b, _2: c};
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$node = _rtfeldman$elm_css$VirtualDom_Styled$Element;
-var _rtfeldman$elm_css$VirtualDom_Styled$Property = F3(
-	function (a, b, c) {
-		return {ctor: 'Property', _0: a, _1: b, _2: c};
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$property = F2(
-	function (key, value) {
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A2(_elm_lang$virtual_dom$VirtualDom$property, key, value),
-			{ctor: '[]'},
-			'');
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$attribute = F2(
-	function (key, value) {
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A2(_elm_lang$virtual_dom$VirtualDom$attribute, key, value),
-			{ctor: '[]'},
-			'');
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$attributeNS = F3(
-	function (namespace, key, value) {
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A3(_elm_lang$virtual_dom$VirtualDom$attributeNS, namespace, key, value),
-			{ctor: '[]'},
-			'');
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$unstyledProperty = function (prop) {
-	return A3(
-		_rtfeldman$elm_css$VirtualDom_Styled$Property,
-		prop,
-		{ctor: '[]'},
-		'');
-};
-var _rtfeldman$elm_css$VirtualDom_Styled$on = F2(
-	function (eventName, decoder) {
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A2(_elm_lang$virtual_dom$VirtualDom$on, eventName, decoder),
-			{ctor: '[]'},
-			'');
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions = F3(
-	function (eventName, options, decoder) {
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A3(_elm_lang$virtual_dom$VirtualDom$onWithOptions, eventName, options, decoder),
-			{ctor: '[]'},
-			'');
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$mapProperty = F2(
-	function (transform, _p39) {
-		var _p40 = _p39;
-		return A3(
-			_rtfeldman$elm_css$VirtualDom_Styled$Property,
-			A2(_elm_lang$virtual_dom$VirtualDom$mapProperty, transform, _p40._0),
-			_p40._1,
-			_p40._2);
-	});
-var _rtfeldman$elm_css$VirtualDom_Styled$map = F2(
-	function (transform, node) {
-		var _p41 = node;
-		switch (_p41.ctor) {
-			case 'Element':
-				return A3(
-					_rtfeldman$elm_css$VirtualDom_Styled$Element,
-					_p41._0,
-					A2(
-						_elm_lang$core$List$map,
-						_rtfeldman$elm_css$VirtualDom_Styled$mapProperty(transform),
-						_p41._1),
-					A2(
-						_elm_lang$core$List$map,
-						_rtfeldman$elm_css$VirtualDom_Styled$map(transform),
-						_p41._2));
-			case 'KeyedElement':
-				return A3(
-					_rtfeldman$elm_css$VirtualDom_Styled$KeyedElement,
-					_p41._0,
-					A2(
-						_elm_lang$core$List$map,
-						_rtfeldman$elm_css$VirtualDom_Styled$mapProperty(transform),
-						_p41._1),
-					A2(
-						_elm_lang$core$List$map,
-						function (_p42) {
-							var _p43 = _p42;
-							return {
-								ctor: '_Tuple2',
-								_0: _p43._0,
-								_1: A2(_rtfeldman$elm_css$VirtualDom_Styled$map, transform, _p43._1)
-							};
-						},
-						_p41._2));
-			default:
-				return _rtfeldman$elm_css$VirtualDom_Styled$Unstyled(
-					A2(_elm_lang$virtual_dom$VirtualDom$map, transform, _p41._0));
-		}
-	});
-
-var _rtfeldman$elm_css$Html_Styled_Internal$css = function (styles) {
-	var classname = _rtfeldman$elm_css$VirtualDom_Styled$getClassname(styles);
-	var classProperty = A2(
-		_elm_lang$virtual_dom$VirtualDom$property,
-		'className',
-		_elm_lang$core$Json_Encode$string(classname));
-	return A3(_rtfeldman$elm_css$VirtualDom_Styled$Property, classProperty, styles, classname);
-};
-
-var _rtfeldman$elm_css$Html_Styled$fromUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$unstyledNode;
-var _rtfeldman$elm_css$Html_Styled$toUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$toUnstyled;
-var _rtfeldman$elm_css$Html_Styled$program = function (config) {
-	return _elm_lang$virtual_dom$VirtualDom$program(
-		_elm_lang$core$Native_Utils.update(
-			config,
-			{
-				view: function (_p0) {
-					return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-						config.view(_p0));
-				}
-			}));
-};
-var _rtfeldman$elm_css$Html_Styled$beginnerProgram = function (_p1) {
-	var _p2 = _p1;
-	return _rtfeldman$elm_css$Html_Styled$program(
-		{
-			init: A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_p2.model,
-				{ctor: '[]'}),
-			update: F2(
-				function (msg, model) {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						A2(_p2.update, msg, model),
-						{ctor: '[]'});
-				}),
-			view: _p2.view,
-			subscriptions: function (_p3) {
-				return _elm_lang$core$Platform_Sub$none;
-			}
-		});
-};
-var _rtfeldman$elm_css$Html_Styled$programWithFlags = function (config) {
-	return _elm_lang$virtual_dom$VirtualDom$programWithFlags(
-		_elm_lang$core$Native_Utils.update(
-			config,
-			{
-				view: function (_p4) {
-					return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-						config.view(_p4));
-				}
-			}));
-};
-var _rtfeldman$elm_css$Html_Styled$styled = F4(
-	function (fn, styles, attrs, children) {
-		return A2(
-			fn,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Internal$css(styles),
-				_1: attrs
-			},
-			children);
-	});
-var _rtfeldman$elm_css$Html_Styled$map = _rtfeldman$elm_css$VirtualDom_Styled$map;
-var _rtfeldman$elm_css$Html_Styled$text = _rtfeldman$elm_css$VirtualDom_Styled$text;
-var _rtfeldman$elm_css$Html_Styled$node = _rtfeldman$elm_css$VirtualDom_Styled$node;
-var _rtfeldman$elm_css$Html_Styled$body = _rtfeldman$elm_css$Html_Styled$node('body');
-var _rtfeldman$elm_css$Html_Styled$section = _rtfeldman$elm_css$Html_Styled$node('section');
-var _rtfeldman$elm_css$Html_Styled$nav = _rtfeldman$elm_css$Html_Styled$node('nav');
-var _rtfeldman$elm_css$Html_Styled$article = _rtfeldman$elm_css$Html_Styled$node('article');
-var _rtfeldman$elm_css$Html_Styled$aside = _rtfeldman$elm_css$Html_Styled$node('aside');
-var _rtfeldman$elm_css$Html_Styled$h1 = _rtfeldman$elm_css$Html_Styled$node('h1');
-var _rtfeldman$elm_css$Html_Styled$h2 = _rtfeldman$elm_css$Html_Styled$node('h2');
-var _rtfeldman$elm_css$Html_Styled$h3 = _rtfeldman$elm_css$Html_Styled$node('h3');
-var _rtfeldman$elm_css$Html_Styled$h4 = _rtfeldman$elm_css$Html_Styled$node('h4');
-var _rtfeldman$elm_css$Html_Styled$h5 = _rtfeldman$elm_css$Html_Styled$node('h5');
-var _rtfeldman$elm_css$Html_Styled$h6 = _rtfeldman$elm_css$Html_Styled$node('h6');
-var _rtfeldman$elm_css$Html_Styled$header = _rtfeldman$elm_css$Html_Styled$node('header');
-var _rtfeldman$elm_css$Html_Styled$footer = _rtfeldman$elm_css$Html_Styled$node('footer');
-var _rtfeldman$elm_css$Html_Styled$address = _rtfeldman$elm_css$Html_Styled$node('address');
-var _rtfeldman$elm_css$Html_Styled$main_ = _rtfeldman$elm_css$Html_Styled$node('main');
-var _rtfeldman$elm_css$Html_Styled$p = _rtfeldman$elm_css$Html_Styled$node('p');
-var _rtfeldman$elm_css$Html_Styled$hr = _rtfeldman$elm_css$Html_Styled$node('hr');
-var _rtfeldman$elm_css$Html_Styled$pre = _rtfeldman$elm_css$Html_Styled$node('pre');
-var _rtfeldman$elm_css$Html_Styled$blockquote = _rtfeldman$elm_css$Html_Styled$node('blockquote');
-var _rtfeldman$elm_css$Html_Styled$ol = _rtfeldman$elm_css$Html_Styled$node('ol');
-var _rtfeldman$elm_css$Html_Styled$ul = _rtfeldman$elm_css$Html_Styled$node('ul');
-var _rtfeldman$elm_css$Html_Styled$li = _rtfeldman$elm_css$Html_Styled$node('li');
-var _rtfeldman$elm_css$Html_Styled$dl = _rtfeldman$elm_css$Html_Styled$node('dl');
-var _rtfeldman$elm_css$Html_Styled$dt = _rtfeldman$elm_css$Html_Styled$node('dt');
-var _rtfeldman$elm_css$Html_Styled$dd = _rtfeldman$elm_css$Html_Styled$node('dd');
-var _rtfeldman$elm_css$Html_Styled$figure = _rtfeldman$elm_css$Html_Styled$node('figure');
-var _rtfeldman$elm_css$Html_Styled$figcaption = _rtfeldman$elm_css$Html_Styled$node('figcaption');
-var _rtfeldman$elm_css$Html_Styled$div = _rtfeldman$elm_css$Html_Styled$node('div');
-var _rtfeldman$elm_css$Html_Styled$a = _rtfeldman$elm_css$Html_Styled$node('a');
-var _rtfeldman$elm_css$Html_Styled$em = _rtfeldman$elm_css$Html_Styled$node('em');
-var _rtfeldman$elm_css$Html_Styled$strong = _rtfeldman$elm_css$Html_Styled$node('strong');
-var _rtfeldman$elm_css$Html_Styled$small = _rtfeldman$elm_css$Html_Styled$node('small');
-var _rtfeldman$elm_css$Html_Styled$s = _rtfeldman$elm_css$Html_Styled$node('s');
-var _rtfeldman$elm_css$Html_Styled$cite = _rtfeldman$elm_css$Html_Styled$node('cite');
-var _rtfeldman$elm_css$Html_Styled$q = _rtfeldman$elm_css$Html_Styled$node('q');
-var _rtfeldman$elm_css$Html_Styled$dfn = _rtfeldman$elm_css$Html_Styled$node('dfn');
-var _rtfeldman$elm_css$Html_Styled$abbr = _rtfeldman$elm_css$Html_Styled$node('abbr');
-var _rtfeldman$elm_css$Html_Styled$time = _rtfeldman$elm_css$Html_Styled$node('time');
-var _rtfeldman$elm_css$Html_Styled$code = _rtfeldman$elm_css$Html_Styled$node('code');
-var _rtfeldman$elm_css$Html_Styled$var = _rtfeldman$elm_css$Html_Styled$node('var');
-var _rtfeldman$elm_css$Html_Styled$samp = _rtfeldman$elm_css$Html_Styled$node('samp');
-var _rtfeldman$elm_css$Html_Styled$kbd = _rtfeldman$elm_css$Html_Styled$node('kbd');
-var _rtfeldman$elm_css$Html_Styled$sub = _rtfeldman$elm_css$Html_Styled$node('sub');
-var _rtfeldman$elm_css$Html_Styled$sup = _rtfeldman$elm_css$Html_Styled$node('sup');
-var _rtfeldman$elm_css$Html_Styled$i = _rtfeldman$elm_css$Html_Styled$node('i');
-var _rtfeldman$elm_css$Html_Styled$b = _rtfeldman$elm_css$Html_Styled$node('b');
-var _rtfeldman$elm_css$Html_Styled$u = _rtfeldman$elm_css$Html_Styled$node('u');
-var _rtfeldman$elm_css$Html_Styled$mark = _rtfeldman$elm_css$Html_Styled$node('mark');
-var _rtfeldman$elm_css$Html_Styled$ruby = _rtfeldman$elm_css$Html_Styled$node('ruby');
-var _rtfeldman$elm_css$Html_Styled$rt = _rtfeldman$elm_css$Html_Styled$node('rt');
-var _rtfeldman$elm_css$Html_Styled$rp = _rtfeldman$elm_css$Html_Styled$node('rp');
-var _rtfeldman$elm_css$Html_Styled$bdi = _rtfeldman$elm_css$Html_Styled$node('bdi');
-var _rtfeldman$elm_css$Html_Styled$bdo = _rtfeldman$elm_css$Html_Styled$node('bdo');
-var _rtfeldman$elm_css$Html_Styled$span = _rtfeldman$elm_css$Html_Styled$node('span');
-var _rtfeldman$elm_css$Html_Styled$br = _rtfeldman$elm_css$Html_Styled$node('br');
-var _rtfeldman$elm_css$Html_Styled$wbr = _rtfeldman$elm_css$Html_Styled$node('wbr');
-var _rtfeldman$elm_css$Html_Styled$ins = _rtfeldman$elm_css$Html_Styled$node('ins');
-var _rtfeldman$elm_css$Html_Styled$del = _rtfeldman$elm_css$Html_Styled$node('del');
-var _rtfeldman$elm_css$Html_Styled$img = _rtfeldman$elm_css$Html_Styled$node('img');
-var _rtfeldman$elm_css$Html_Styled$iframe = _rtfeldman$elm_css$Html_Styled$node('iframe');
-var _rtfeldman$elm_css$Html_Styled$embed = _rtfeldman$elm_css$Html_Styled$node('embed');
-var _rtfeldman$elm_css$Html_Styled$object = _rtfeldman$elm_css$Html_Styled$node('object');
-var _rtfeldman$elm_css$Html_Styled$param = _rtfeldman$elm_css$Html_Styled$node('param');
-var _rtfeldman$elm_css$Html_Styled$video = _rtfeldman$elm_css$Html_Styled$node('video');
-var _rtfeldman$elm_css$Html_Styled$audio = _rtfeldman$elm_css$Html_Styled$node('audio');
-var _rtfeldman$elm_css$Html_Styled$source = _rtfeldman$elm_css$Html_Styled$node('source');
-var _rtfeldman$elm_css$Html_Styled$track = _rtfeldman$elm_css$Html_Styled$node('track');
-var _rtfeldman$elm_css$Html_Styled$canvas = _rtfeldman$elm_css$Html_Styled$node('canvas');
-var _rtfeldman$elm_css$Html_Styled$math = _rtfeldman$elm_css$Html_Styled$node('math');
-var _rtfeldman$elm_css$Html_Styled$table = _rtfeldman$elm_css$Html_Styled$node('table');
-var _rtfeldman$elm_css$Html_Styled$caption = _rtfeldman$elm_css$Html_Styled$node('caption');
-var _rtfeldman$elm_css$Html_Styled$colgroup = _rtfeldman$elm_css$Html_Styled$node('colgroup');
-var _rtfeldman$elm_css$Html_Styled$col = _rtfeldman$elm_css$Html_Styled$node('col');
-var _rtfeldman$elm_css$Html_Styled$tbody = _rtfeldman$elm_css$Html_Styled$node('tbody');
-var _rtfeldman$elm_css$Html_Styled$thead = _rtfeldman$elm_css$Html_Styled$node('thead');
-var _rtfeldman$elm_css$Html_Styled$tfoot = _rtfeldman$elm_css$Html_Styled$node('tfoot');
-var _rtfeldman$elm_css$Html_Styled$tr = _rtfeldman$elm_css$Html_Styled$node('tr');
-var _rtfeldman$elm_css$Html_Styled$td = _rtfeldman$elm_css$Html_Styled$node('td');
-var _rtfeldman$elm_css$Html_Styled$th = _rtfeldman$elm_css$Html_Styled$node('th');
-var _rtfeldman$elm_css$Html_Styled$form = _rtfeldman$elm_css$Html_Styled$node('form');
-var _rtfeldman$elm_css$Html_Styled$fieldset = _rtfeldman$elm_css$Html_Styled$node('fieldset');
-var _rtfeldman$elm_css$Html_Styled$legend = _rtfeldman$elm_css$Html_Styled$node('legend');
-var _rtfeldman$elm_css$Html_Styled$label = _rtfeldman$elm_css$Html_Styled$node('label');
-var _rtfeldman$elm_css$Html_Styled$input = _rtfeldman$elm_css$Html_Styled$node('input');
-var _rtfeldman$elm_css$Html_Styled$button = _rtfeldman$elm_css$Html_Styled$node('button');
-var _rtfeldman$elm_css$Html_Styled$select = _rtfeldman$elm_css$Html_Styled$node('select');
-var _rtfeldman$elm_css$Html_Styled$datalist = _rtfeldman$elm_css$Html_Styled$node('datalist');
-var _rtfeldman$elm_css$Html_Styled$optgroup = _rtfeldman$elm_css$Html_Styled$node('optgroup');
-var _rtfeldman$elm_css$Html_Styled$option = _rtfeldman$elm_css$Html_Styled$node('option');
-var _rtfeldman$elm_css$Html_Styled$textarea = _rtfeldman$elm_css$Html_Styled$node('textarea');
-var _rtfeldman$elm_css$Html_Styled$keygen = _rtfeldman$elm_css$Html_Styled$node('keygen');
-var _rtfeldman$elm_css$Html_Styled$output = _rtfeldman$elm_css$Html_Styled$node('output');
-var _rtfeldman$elm_css$Html_Styled$progress = _rtfeldman$elm_css$Html_Styled$node('progress');
-var _rtfeldman$elm_css$Html_Styled$meter = _rtfeldman$elm_css$Html_Styled$node('meter');
-var _rtfeldman$elm_css$Html_Styled$details = _rtfeldman$elm_css$Html_Styled$node('details');
-var _rtfeldman$elm_css$Html_Styled$summary = _rtfeldman$elm_css$Html_Styled$node('summary');
-var _rtfeldman$elm_css$Html_Styled$menuitem = _rtfeldman$elm_css$Html_Styled$node('menuitem');
-var _rtfeldman$elm_css$Html_Styled$menu = _rtfeldman$elm_css$Html_Styled$node('menu');
-
-var _rtfeldman$elm_css$Html_Styled_Attributes$css = _rtfeldman$elm_css$Html_Styled_Internal$css;
-var _rtfeldman$elm_css$Html_Styled_Attributes$map = _rtfeldman$elm_css$VirtualDom_Styled$mapProperty;
-var _rtfeldman$elm_css$Html_Styled_Attributes$attribute = _rtfeldman$elm_css$VirtualDom_Styled$attribute;
-var _rtfeldman$elm_css$Html_Styled_Attributes$contextmenu = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'contextmenu', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$draggable = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'draggable', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$itemprop = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'itemprop', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$tabindex = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'tabIndex',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$charset = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'charset', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$height = function (value) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'height',
-		_elm_lang$core$Basics$toString(value));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$width = function (value) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'width',
-		_elm_lang$core$Basics$toString(value));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$formaction = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'formAction', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$list = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'list', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$minlength = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'minLength',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$maxlength = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'maxlength',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$size = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'size',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$form = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'form', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$cols = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'cols',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$rows = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'rows',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$challenge = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'challenge', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$media = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'media', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$rel = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'rel', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$datetime = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'datetime', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$pubdate = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'pubdate', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$colspan = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'colspan',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$rowspan = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$attribute,
-		'rowspan',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$manifest = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$attribute, 'manifest', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$property = _rtfeldman$elm_css$VirtualDom_Styled$property;
-var _rtfeldman$elm_css$Html_Styled_Attributes$stringProperty = F2(
-	function (name, string) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled_Attributes$property,
-			name,
-			_elm_lang$core$Json_Encode$string(string));
-	});
-var _rtfeldman$elm_css$Html_Styled_Attributes$class = function (name) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'className', name);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$id = function (name) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'id', name);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$title = function (name) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'title', name);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$accesskey = function ($char) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
-		'accessKey',
-		_elm_lang$core$String$fromChar($char));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$dir = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'dir', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$dropzone = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'dropzone', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$lang = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'lang', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$content = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'content', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$httpEquiv = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'httpEquiv', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$language = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'language', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$src = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'src', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$alt = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'alt', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$preload = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'preload', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$poster = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'poster', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$kind = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'kind', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$srclang = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'srclang', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$sandbox = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'sandbox', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$srcdoc = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'srcdoc', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$type_ = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'type', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$value = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'value', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$defaultValue = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'defaultValue', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$placeholder = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'placeholder', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$accept = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'accept', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$acceptCharset = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'acceptCharset', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$action = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'action', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$autocomplete = function (bool) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
-		'autocomplete',
-		bool ? 'on' : 'off');
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$enctype = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'enctype', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$method = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'method', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$name = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'name', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$pattern = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'pattern', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$for = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'htmlFor', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$max = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'max', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$min = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'min', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$step = function (n) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'step', n);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$wrap = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'wrap', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$usemap = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'useMap', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$shape = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'shape', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$coords = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'coords', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$keytype = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'keytype', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$align = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'align', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$cite = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'cite', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$href = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'href', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$target = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'target', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$downloadAs = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'download', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$hreflang = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'hreflang', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$ping = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'ping', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$start = function (n) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty,
-		'start',
-		_elm_lang$core$Basics$toString(n));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$headers = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'headers', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$scope = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$stringProperty, 'scope', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$boolProperty = F2(
-	function (name, bool) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled_Attributes$property,
-			name,
-			_elm_lang$core$Json_Encode$bool(bool));
-	});
-var _rtfeldman$elm_css$Html_Styled_Attributes$hidden = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'hidden', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$contenteditable = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'contentEditable', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$spellcheck = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'spellcheck', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$async = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'async', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$defer = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'defer', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$scoped = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'scoped', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$autoplay = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'autoplay', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$controls = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'controls', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$loop = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'loop', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$default = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'default', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$seamless = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'seamless', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$checked = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'checked', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$selected = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'selected', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$autofocus = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'autofocus', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$disabled = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'disabled', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$multiple = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'multiple', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$novalidate = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'noValidate', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$readonly = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'readOnly', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$required = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'required', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$ismap = function (value) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'isMap', value);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$download = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'download', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$reversed = function (bool) {
-	return A2(_rtfeldman$elm_css$Html_Styled_Attributes$boolProperty, 'reversed', bool);
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$classList = function (list) {
-	return _rtfeldman$elm_css$Html_Styled_Attributes$class(
-		A2(
-			_elm_lang$core$String$join,
-			' ',
-			A2(
-				_elm_lang$core$List$map,
-				_elm_lang$core$Tuple$first,
-				A2(_elm_lang$core$List$filter, _elm_lang$core$Tuple$second, list))));
-};
-var _rtfeldman$elm_css$Html_Styled_Attributes$fromUnstyled = _rtfeldman$elm_css$VirtualDom_Styled$unstyledProperty;
-var _rtfeldman$elm_css$Html_Styled_Attributes$style = function (_p0) {
-	return _rtfeldman$elm_css$Html_Styled_Attributes$fromUnstyled(
-		_elm_lang$virtual_dom$VirtualDom$style(_p0));
-};
-
-var _rtfeldman$elm_css$Html_Styled_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _rtfeldman$elm_css$Html_Styled_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _rtfeldman$elm_css$Html_Styled_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _rtfeldman$elm_css$Html_Styled_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _rtfeldman$elm_css$Html_Styled_Events$onWithOptions = _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions;
-var _rtfeldman$elm_css$Html_Styled_Events$on = _rtfeldman$elm_css$VirtualDom_Styled$on;
-var _rtfeldman$elm_css$Html_Styled_Events$onFocus = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'focus',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onBlur = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'blur',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
-	_rtfeldman$elm_css$Html_Styled_Events$defaultOptions,
-	{preventDefault: true});
-var _rtfeldman$elm_css$Html_Styled_Events$onSubmit = function (msg) {
-	return A3(
-		_rtfeldman$elm_css$Html_Styled_Events$onWithOptions,
-		'submit',
-		_rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions,
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onCheck = function (tagger) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'change',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetChecked));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onInput = function (tagger) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'input',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetValue));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseOut = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseout',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseOver = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseover',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseLeave = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseleave',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseenter',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseUp = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseup',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseDown = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mousedown',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onDoubleClick = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'dblclick',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onClick = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'click',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
-	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
-	});
-
-var _elm_lang$virtual_dom$Main$accordionElmCss = F3(
-	function (openMsg, isOpen, acc) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$div,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Html_Styled$h4,
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(openMsg),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-								{
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$zero),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer),
-										_1: {
-											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$fontFamilies(
-												{
-													ctor: '::',
-													_0: 'Arial',
-													_1: {
-														ctor: '::',
-														_0: function (_) {
-															return _.value;
-														}(_rtfeldman$elm_css$Css$sansSerif),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$backgroundColor(
-													_rtfeldman$elm_css$Css$hex('eee')),
-												_1: {
-													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$padding(
-														_rtfeldman$elm_css$Css$px(8)),
-													_1: {
-														ctor: '::',
-														_0: _rtfeldman$elm_css$Css$fontWeight(
-															_rtfeldman$elm_css$Css$int(400)),
-														_1: {
-															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$fontSize(
-																_rtfeldman$elm_css$Css$px(20)),
-															_1: {
-																ctor: '::',
-																_0: A3(
-																	_rtfeldman$elm_css$Css$border3,
-																	_rtfeldman$elm_css$Css$px(1),
-																	_rtfeldman$elm_css$Css$solid,
-																	_rtfeldman$elm_css$Css$hex('aaa')),
-																_1: {
-																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$lineHeight(
-																		_rtfeldman$elm_css$Css$px(20)),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled$text(acc.heading),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_rtfeldman$elm_css$Html_Styled$p,
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-								{
-									ctor: '::',
-									_0: isOpen ? _rtfeldman$elm_css$Css$height(_rtfeldman$elm_css$Css$auto) : _rtfeldman$elm_css$Css$height(_rtfeldman$elm_css$Css$zero),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$hidden),
-										_1: {
-											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$fontFamilies(
-												{
-													ctor: '::',
-													_0: 'Arial',
-													_1: {
-														ctor: '::',
-														_0: function (_) {
-															return _.value;
-														}(_rtfeldman$elm_css$Css$sansSerif),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_rtfeldman$elm_css$Css$margin2,
-													_rtfeldman$elm_css$Css$px(12),
-													_rtfeldman$elm_css$Css$zero),
-												_1: {
-													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$lineHeight(
-														_rtfeldman$elm_css$Css$px(21)),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled$text(acc.content),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
-var _elm_lang$virtual_dom$Main$accordionWrapperStyle = {
+var _elm_lang$virtual_dom$Impl_StylishElephants$accordionWrapperStyle = {
 	ctor: '::',
 	_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
 	_1: {
@@ -24825,7 +24994,7 @@ var _elm_lang$virtual_dom$Main$accordionWrapperStyle = {
 		_1: {ctor: '[]'}
 	}
 };
-var _elm_lang$virtual_dom$Main$accordionContentStyle = {
+var _elm_lang$virtual_dom$Impl_StylishElephants$accordionContentStyle = {
 	ctor: '::',
 	_0: _mdgriffith$stylish_elephants$Element$clip,
 	_1: {
@@ -24855,7 +25024,7 @@ var _elm_lang$virtual_dom$Main$accordionContentStyle = {
 		}
 	}
 };
-var _elm_lang$virtual_dom$Main$accordionHeadingStyle = {
+var _elm_lang$virtual_dom$Impl_StylishElephants$accordionHeadingStyle = {
 	ctor: '::',
 	_0: _mdgriffith$stylish_elephants$Element$pointer,
 	_1: {
@@ -24911,11 +25080,11 @@ var _elm_lang$virtual_dom$Main$accordionHeadingStyle = {
 		}
 	}
 };
-var _elm_lang$virtual_dom$Main$accordionSE = F3(
+var _elm_lang$virtual_dom$Impl_StylishElephants$renderAccordion = F3(
 	function (openMsg, isOpen, acc) {
 		return A2(
 			_mdgriffith$stylish_elephants$Element$column,
-			_elm_lang$virtual_dom$Main$accordionWrapperStyle,
+			_elm_lang$virtual_dom$Impl_StylishElephants$accordionWrapperStyle,
 			{
 				ctor: '::',
 				_0: A2(
@@ -24923,7 +25092,7 @@ var _elm_lang$virtual_dom$Main$accordionSE = F3(
 					{
 						ctor: '::',
 						_0: _mdgriffith$stylish_elephants$Element_Events$onClick(openMsg),
-						_1: _elm_lang$virtual_dom$Main$accordionHeadingStyle
+						_1: _elm_lang$virtual_dom$Impl_StylishElephants$accordionHeadingStyle
 					},
 					{
 						ctor: '::',
@@ -24937,12 +25106,12 @@ var _elm_lang$virtual_dom$Main$accordionSE = F3(
 						isOpen ? {
 							ctor: '::',
 							_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
-							_1: _elm_lang$virtual_dom$Main$accordionContentStyle
+							_1: _elm_lang$virtual_dom$Impl_StylishElephants$accordionContentStyle
 						} : {
 							ctor: '::',
 							_0: _mdgriffith$stylish_elephants$Element$height(
 								_mdgriffith$stylish_elephants$Element$px(0)),
-							_1: _elm_lang$virtual_dom$Main$accordionContentStyle
+							_1: _elm_lang$virtual_dom$Impl_StylishElephants$accordionContentStyle
 						},
 						{
 							ctor: '::',
@@ -24953,160 +25122,11 @@ var _elm_lang$virtual_dom$Main$accordionSE = F3(
 				}
 			});
 	});
-var _elm_lang$virtual_dom$Main$accordionHtmlInline = F3(
-	function (openMsg, isOpen, acc) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h4,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(openMsg),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'pointer'},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Arial, sans-serif'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'background', _1: '#eee'},
-												_1: {
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'padding', _1: '8px'},
-													_1: {
-														ctor: '::',
-														_0: {ctor: '_Tuple2', _0: 'font-weight', _1: '400'},
-														_1: {
-															ctor: '::',
-															_0: {ctor: '_Tuple2', _0: 'font-size', _1: '20px'},
-															_1: {
-																ctor: '::',
-																_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid 1px #aaa'},
-																_1: {
-																	ctor: '::',
-																	_0: {ctor: '_Tuple2', _0: 'line-height', _1: '20px'},
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(acc.heading),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$p,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: isOpen ? {ctor: '_Tuple2', _0: 'height', _1: 'auto'} : {ctor: '_Tuple2', _0: 'height', _1: '0'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Arial, sans-serif'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'margin', _1: '12px 0'},
-												_1: {
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'line-height', _1: '21px'},
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(acc.content),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
+var _elm_lang$virtual_dom$Impl_StylishElephants$Accordion = F2(
+	function (a, b) {
+		return {heading: a, content: b};
 	});
-var _elm_lang$virtual_dom$Main$css = '\n.page {\n    padding: 12px;\n}\n.header-button-row {\n    margin: 8px 0;\n}\n\n.header-button-row button {\n    margin: 0 4px;\n}\n.wrapper {\n    padding: 32px;\n}\n.accordion .header {\n    cursor: pointer;\n    margin: 0;\n    font-family: Arial, sans-serif;\n    font-weight: 400;\n    border: solid 1px #aaa;\n    background: #eee;\n    padding: 8px;\n    font-size: 20px;\n    line-height: 20px;\n}\n.accordion .header:hover {\n    border-color: #666;\n}\n\n.accordion .content {\n    overflow: hidden;\n    height: 0;\n    font-family: Arial, sans-serif;\n    margin: 12px 0;\n    line-height: 21px;\n}\n\n.accordion .content.open {\n    height: auto;\n}\n';
-var _elm_lang$virtual_dom$Main$accordionHtmlCss = F3(
-	function (openMsg, isOpen, acc) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('accordion'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h4,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(openMsg),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('header'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(acc.heading),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$p,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('content'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$classList(
-									{
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'open', _1: isOpen},
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(acc.content),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
+
 var _elm_lang$virtual_dom$Main$implLabel = function (impl) {
 	var _p0 = impl;
 	switch (_p0.ctor) {
@@ -25114,7 +25134,7 @@ var _elm_lang$virtual_dom$Main$implLabel = function (impl) {
 			return 'HTML / CSS';
 		case 'Impl_HtmlInline':
 			return 'HTML with inline style';
-		case 'Impl_SE':
+		case 'Impl_StylishElephants':
 			return 'Stylish Elephants (6.0.2)';
 		default:
 			return 'elm-css (14.0.0)';
@@ -25216,7 +25236,7 @@ var _elm_lang$virtual_dom$Main$renderAccordions = function (state) {
 						function (_p2) {
 							var _p3 = _p2;
 							return A3(
-								_elm_lang$virtual_dom$Main$accordionHtmlCss,
+								_elm_lang$virtual_dom$Impl_HtmlCss$renderAccordion,
 								_p3._1,
 								_elm_lang$core$Native_Utils.eq(
 									_elm_lang$core$Maybe$Just(_p3._0),
@@ -25248,7 +25268,7 @@ var _elm_lang$virtual_dom$Main$renderAccordions = function (state) {
 						function (_p4) {
 							var _p5 = _p4;
 							return A3(
-								_elm_lang$virtual_dom$Main$accordionHtmlInline,
+								_elm_lang$virtual_dom$Impl_HtmlInline$renderAccordion,
 								_p5._1,
 								_elm_lang$core$Native_Utils.eq(
 									_elm_lang$core$Maybe$Just(_p5._0),
@@ -25256,7 +25276,7 @@ var _elm_lang$virtual_dom$Main$renderAccordions = function (state) {
 								_elm_lang$virtual_dom$Main$accordion);
 						},
 						state.actions)));
-		case 'Impl_SE':
+		case 'Impl_StylishElephants':
 			return A2(
 				F2(
 					function (v0, v1) {
@@ -25282,7 +25302,7 @@ var _elm_lang$virtual_dom$Main$renderAccordions = function (state) {
 							function (_p6) {
 								var _p7 = _p6;
 								return A3(
-									_elm_lang$virtual_dom$Main$accordionSE,
+									_elm_lang$virtual_dom$Impl_StylishElephants$renderAccordion,
 									_p7._1,
 									_elm_lang$core$Native_Utils.eq(
 										_elm_lang$core$Maybe$Just(_p7._0),
@@ -25316,7 +25336,7 @@ var _elm_lang$virtual_dom$Main$renderAccordions = function (state) {
 							function (_p8) {
 								var _p9 = _p8;
 								return A3(
-									_elm_lang$virtual_dom$Main$accordionElmCss,
+									_elm_lang$virtual_dom$Impl_ElmCss$renderAccordion,
 									_p9._1,
 									_elm_lang$core$Native_Utils.eq(
 										_elm_lang$core$Maybe$Just(_p9._0),
@@ -25335,7 +25355,7 @@ var _elm_lang$virtual_dom$Main$Accordion = F2(
 		return {heading: a, content: b};
 	});
 var _elm_lang$virtual_dom$Main$Impl_ElmCss = {ctor: 'Impl_ElmCss'};
-var _elm_lang$virtual_dom$Main$Impl_SE = {ctor: 'Impl_SE'};
+var _elm_lang$virtual_dom$Main$Impl_StylishElephants = {ctor: 'Impl_StylishElephants'};
 var _elm_lang$virtual_dom$Main$Impl_HtmlInline = {ctor: 'Impl_HtmlInline'};
 var _elm_lang$virtual_dom$Main$Impl_HtmlCss = {ctor: 'Impl_HtmlCss'};
 var _elm_lang$virtual_dom$Main$SetCount = function (a) {
@@ -25527,7 +25547,7 @@ var _elm_lang$virtual_dom$Main$heading = function (_p10) {
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onClick(
-												_elm_lang$virtual_dom$Main$SetImpl(_elm_lang$virtual_dom$Main$Impl_SE)),
+												_elm_lang$virtual_dom$Main$SetImpl(_elm_lang$virtual_dom$Main$Impl_StylishElephants)),
 											_1: {ctor: '[]'}
 										},
 										{
@@ -25815,7 +25835,7 @@ var _elm_lang$virtual_dom$Main$view = function (state) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(_elm_lang$virtual_dom$Main$css),
+										_0: _elm_lang$html$Html$text(_elm_lang$virtual_dom$Impl_HtmlCss$css),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
