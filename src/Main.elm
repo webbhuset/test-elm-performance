@@ -1,14 +1,8 @@
 module Main exposing (..)
 
 import AnimationFrame
-import Color
 import Css
 import Element exposing (Element)
-import Element.Background as Bg
-import Element.Border as Border
-import Element.Events as Element
-import Element.Font as Font
-import Element.Region as Region
 import Html exposing (Html)
 import Html.Attributes as Html
 import Html.Events as Html
@@ -16,8 +10,12 @@ import Html.Keyed as Keyed
 import Html.Lazy as Html
 import Html.Styled as Styled
 import Html.Styled.Attributes as StyledAttrs
-import Html.Styled.Events as StyledEvents
 import Time exposing (Time)
+
+import Impl.HtmlCss
+import Impl.HtmlInline
+import Impl.StylishElephants
+import Impl.ElmCss
 
 
 type alias State =
@@ -52,7 +50,7 @@ testCount =
 type Impl
     = Impl_HtmlCss
     | Impl_HtmlInline
-    | Impl_SE
+    | Impl_StylishElephants
     | Impl_ElmCss
 
 
@@ -168,7 +166,7 @@ view state =
         , Html.h2 [] [ Html.text <| "Implementation: " ++ implLabel state.impl ]
         , Html.p [] [ Html.text <| "Number of accordions: " ++ toString state.count ]
         , Keyed.node "div" [] [ renderAccordions state ]
-        , Html.node "style" [] [ Html.text css ]
+        , Html.node "style" [] [ Html.text Impl.HtmlCss.css ]
         ]
 
 
@@ -196,7 +194,7 @@ heading _ =
         , Html.div [ Html.class "header-button-row" ]
             [ Html.button [ Html.onClick (SetImpl Impl_HtmlCss) ] [ Html.text "HTML / CSS" ]
             , Html.button [ Html.onClick (SetImpl Impl_HtmlInline) ] [ Html.text "HTML Inline" ]
-            , Html.button [ Html.onClick (SetImpl Impl_SE) ] [ Html.text "Stylish Elephants" ]
+            , Html.button [ Html.onClick (SetImpl Impl_StylishElephants) ] [ Html.text "Stylish Elephants" ]
             , Html.button [ Html.onClick (SetImpl Impl_ElmCss) ] [ Html.text "elm-css" ]
             ]
         , Html.p [] [ Html.text "Repeat the accordion this many times:" ]
@@ -249,7 +247,7 @@ implLabel impl =
         Impl_HtmlInline ->
             "HTML with inline style"
 
-        Impl_SE ->
+        Impl_StylishElephants ->
             "Stylish Elephants (6.0.2)"
 
         Impl_ElmCss ->
@@ -261,13 +259,25 @@ renderAccordions state =
     case state.impl of
         Impl_HtmlCss ->
             state.actions
-                |> List.map (\( idx, openMsg ) -> accordionHtmlCss openMsg (Just idx == state.open) accordion)
+                |> List.map
+                    (\( idx, openMsg ) ->
+                        Impl.HtmlCss.renderAccordion
+                            openMsg
+                            (Just idx == state.open)
+                            accordion
+                    )
                 |> Html.div [ Html.class "wrapper" ]
                 |> (,) "html-css"
 
         Impl_HtmlInline ->
             state.actions
-                |> List.map (\( idx, openMsg ) -> accordionHtmlInline openMsg (Just idx == state.open) accordion)
+                |> List.map
+                    (\( idx, openMsg ) ->
+                        Impl.HtmlInline.renderAccordion
+                            openMsg
+                            (Just idx == state.open)
+                            accordion
+                    )
                 |> Html.div
                     [ Html.style
                         [ ( "padding", "32px" )
@@ -275,16 +285,28 @@ renderAccordions state =
                     ]
                 |> (,) "html-inline"
 
-        Impl_SE ->
+        Impl_StylishElephants ->
             state.actions
-                |> List.map (\( idx, openMsg ) -> accordionSE openMsg (Just idx == state.open) accordion)
+                |> List.map
+                    (\( idx, openMsg ) ->
+                        Impl.StylishElephants.renderAccordion
+                        openMsg
+                        (Just idx == state.open)
+                        accordion
+                    )
                 |> Element.column [ Element.padding 32, Element.spacing 16 ]
                 |> Element.layout []
                 |> (,) "style-elements"
 
         Impl_ElmCss ->
             state.actions
-                |> List.map (\( idx, openMsg ) -> accordionElmCss openMsg (Just idx == state.open) accordion)
+                |> List.map
+                    (\( idx, openMsg ) ->
+                        Impl.ElmCss.renderAccordion
+                            openMsg
+                            (Just idx == state.open)
+                            accordion
+                    )
                 |> Styled.div
                     [ StyledAttrs.css
                         [ Css.padding (Css.px 32)
@@ -295,210 +317,4 @@ renderAccordions state =
 
 
 
--- HTML / CSS
 
-
-accordionHtmlCss : msg -> Bool -> Accordion -> Html msg
-accordionHtmlCss openMsg isOpen acc =
-    Html.div
-        [ Html.class "accordion" ]
-        [ Html.h4
-            [ Html.onClick openMsg
-            , Html.class "header"
-            ]
-            [ Html.text acc.heading
-            ]
-        , Html.p
-            [ Html.class "content"
-            , Html.classList
-                [ ( "open", isOpen )
-                ]
-            ]
-            [ Html.text acc.content
-            ]
-        ]
-
-
-css : String
-css =
-    """
-.page {
-    padding: 12px;
-}
-.header-button-row {
-    margin: 8px 0;
-}
-
-.header-button-row button {
-    margin: 0 4px;
-}
-.wrapper {
-    padding: 32px;
-}
-.accordion .header {
-    cursor: pointer;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-weight: 400;
-    border: solid 1px #aaa;
-    background: #eee;
-    padding: 8px;
-    font-size: 20px;
-    line-height: 20px;
-}
-.accordion .header:hover {
-    border-color: #666;
-}
-
-.accordion .content {
-    overflow: hidden;
-    height: 0;
-    font-family: Arial, sans-serif;
-    margin: 12px 0;
-    line-height: 21px;
-}
-
-.accordion .content.open {
-    height: auto;
-}
-"""
-
-
-
--- HTML with inline style
-
-
-accordionHtmlInline : msg -> Bool -> Accordion -> Html msg
-accordionHtmlInline openMsg isOpen acc =
-    Html.div
-        []
-        [ Html.h4
-            [ Html.onClick openMsg
-            , Html.style
-                [ ( "margin", "0" )
-                , ( "cursor", "pointer" )
-                , ( "font-family", "Arial, sans-serif" )
-                , ( "background", "#eee" )
-                , ( "padding", "8px" )
-                , ( "font-weight", "400" )
-                , ( "font-size", "20px" )
-                , ( "border", "solid 1px #aaa" )
-                , ( "line-height", "20px" )
-                ]
-            ]
-            [ Html.text acc.heading
-            ]
-        , Html.p
-            [ Html.style
-                [ if isOpen then
-                    ( "height", "auto" )
-                  else
-                    ( "height", "0" )
-                , ( "overflow", "hidden" )
-                , ( "font-family", "Arial, sans-serif" )
-                , ( "margin", "12px 0" )
-                , ( "line-height", "21px" )
-                ]
-            ]
-            [ Html.text acc.content
-            ]
-        ]
-
-
-
--- Stylish Elephants
-
-
-accordionSE : msg -> Bool -> Accordion -> Element msg
-accordionSE openMsg isOpen acc =
-    Element.column
-        accordionWrapperStyle
-        [ Element.paragraph
-            (Element.onClick openMsg
-                :: accordionHeadingStyle
-            )
-            [ Element.text acc.heading
-            ]
-        , Element.paragraph
-            (if isOpen then
-                Element.height Element.shrink :: accordionContentStyle
-             else
-                Element.height (Element.px 0) :: accordionContentStyle
-            )
-            [ Element.text acc.content
-            ]
-        ]
-
-
-accordionHeadingStyle : List (Element.Attribute msg)
-accordionHeadingStyle =
-    [ Element.pointer
-    , Element.padding 8
-    , Font.size 20
-    , Font.color Color.black
-    , Font.family [ Font.typeface "Arial", Font.sansSerif ]
-    , Bg.color (Color.rgb 0xEE 0xEE 0xEE)
-    , Element.width Element.fill
-    , Border.color (Color.rgb 0xAA 0xAA 0xAA)
-    , Border.solid
-    , Border.width 1
-    , Region.heading 4
-    ]
-
-
-accordionContentStyle : List (Element.Attribute msg)
-accordionContentStyle =
-    [ Element.clip
-    , Element.width Element.fill
-    , Font.family [ Font.typeface "Arial", Font.sansSerif ]
-    , Font.size 16
-    , Font.color Color.black
-    ]
-
-
-accordionWrapperStyle : List (Element.Attribute msg)
-accordionWrapperStyle =
-    [ Element.width Element.fill
-    , Element.spacing 12
-    ]
-
-
-
--- elm-css
-
-
-accordionElmCss : msg -> Bool -> Accordion -> Styled.Html msg
-accordionElmCss openMsg isOpen acc =
-    Styled.div
-        []
-        [ Styled.h4
-            [ StyledEvents.onClick openMsg
-            , StyledAttrs.css
-                [ Css.margin Css.zero
-                , Css.cursor Css.pointer
-                , Css.fontFamilies [ "Arial", .value Css.sansSerif ]
-                , Css.backgroundColor (Css.hex "eee")
-                , Css.padding (Css.px 8)
-                , Css.fontWeight (Css.int 400)
-                , Css.fontSize (Css.px 20)
-                , Css.border3 (Css.px 1) Css.solid (Css.hex "aaa")
-                , Css.lineHeight (Css.px 20)
-                ]
-            ]
-            [ Styled.text acc.heading
-            ]
-        , Styled.p
-            [ StyledAttrs.css
-                [ if isOpen then
-                    Css.height Css.auto
-                  else
-                    Css.height Css.zero
-                , Css.overflow Css.hidden
-                , Css.fontFamilies [ "Arial", .value Css.sansSerif ]
-                , Css.margin2 (Css.px 12) Css.zero
-                , Css.lineHeight (Css.px 21)
-                ]
-            ]
-            [ Styled.text acc.content
-            ]
-        ]
