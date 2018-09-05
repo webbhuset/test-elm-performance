@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (main)
 
 import Browser
 import Browser.Events
@@ -52,7 +52,7 @@ testCount =
 type Impl
     = Impl_HtmlCss
     | Impl_HtmlInline
-    | Impl_SE
+    | Impl_ElmUI
     | Impl_ElmCss
 
 
@@ -103,6 +103,7 @@ update msg state =
                         Just i ->
                             if i == idx then
                                 Nothing
+
                             else
                                 Just idx
 
@@ -146,6 +147,7 @@ subscriptions : State -> Sub Msg
 subscriptions state =
     if state.isRunning then
         Browser.Events.onAnimationFrameDelta TickTest
+
     else
         Sub.none
 
@@ -180,8 +182,8 @@ heading _ =
             , Html.ul []
                 [ Html.li [] [ Html.text "HTML with CSS classes (only CSS classes handled by VDOM)" ]
                 , Html.li [] [ Html.text "HTML with inline style (all style is handled by VDOM)" ]
-                , Html.li [] [ Html.text "Style Elements (stylish elephants)" ]
-                , Html.li [] [ Html.text "elm-css (rtfeldman/elm-css with inline styles)" ]
+                , Html.li [] [ Html.text "mdgriffith/elm-ui" ]
+                , Html.li [] [ Html.text "rtfeldman/elm-css" ]
                 ]
             , Html.text "The rendering times are logged to the console and performance timeline (Chrome)."
             , Html.br [] []
@@ -196,7 +198,7 @@ heading _ =
         , Html.div [ Html.class "header-button-row" ]
             [ Html.button [ Html.onClick (SetImpl Impl_HtmlCss) ] [ Html.text "HTML / CSS" ]
             , Html.button [ Html.onClick (SetImpl Impl_HtmlInline) ] [ Html.text "HTML Inline" ]
-            , Html.button [ Html.onClick (SetImpl Impl_SE) ] [ Html.text "Stylish Elephants" ]
+            , Html.button [ Html.onClick (SetImpl Impl_ElmUI) ] [ Html.text "elm-ui" ]
             , Html.button [ Html.onClick (SetImpl Impl_ElmCss) ] [ Html.text "elm-css" ]
             ]
         , Html.p [] [ Html.text "Repeat the accordion this many times:" ]
@@ -223,8 +225,10 @@ renderSummary : State -> Html Msg
 renderSummary state =
     if state.isRunning then
         Html.div [] [ Html.text "Wait for test to complete" ]
+
     else if List.length state.times == 0 then
         Html.div [] [ Html.text "Hit start to run test" ]
+
     else
         let
             testSum =
@@ -249,11 +253,11 @@ implLabel impl =
         Impl_HtmlInline ->
             "HTML with inline style"
 
-        Impl_SE ->
-            "Stylish Elephants (7.0.3)"
+        Impl_ElmUI ->
+            "elm-ui (1.0.0)"
 
         Impl_ElmCss ->
-            "elm-css (15.0.0)"
+            "elm-css (15.1.0)"
 
 
 renderAccordions : State -> ( String, Html Msg )
@@ -273,9 +277,9 @@ renderAccordions state =
                     ]
                 |> Tuple.pair "html-inline"
 
-        Impl_SE ->
+        Impl_ElmUI ->
             state.actions
-                |> List.map (\( idx, openMsg ) -> accordionSE openMsg (Just idx == state.open) accordion)
+                |> List.map (\( idx, openMsg ) -> accordionElmUI openMsg (Just idx == state.open) accordion)
                 |> Element.column [ Element.padding 32, Element.spacing 16, Element.width Element.fill ]
                 |> Element.layout []
                 |> Tuple.pair "style-elements"
@@ -387,6 +391,7 @@ accordionHtmlInline openMsg isOpen acc =
         , Html.p
             [ if isOpen then
                 Html.style "height" "auto"
+
               else
                 Html.style "height" "0"
             , Html.style "overflow" "hidden"
@@ -400,7 +405,7 @@ accordionHtmlInline openMsg isOpen acc =
 
 
 
--- Stylish Elephants
+-- Elm UI
 
 
 attributes : List (Element.Attribute msg)
@@ -437,8 +442,8 @@ columnAttributes =
     ]
 
 
-accordionSE : msg -> Bool -> Accordion -> Element msg
-accordionSE openMsg isOpen acc =
+accordionElmUI : msg -> Bool -> Accordion -> Element msg
+accordionElmUI openMsg isOpen acc =
     Element.column columnAttributes
         [ Element.paragraph
             (Element.onClick openMsg :: attributes)
@@ -449,6 +454,7 @@ accordionSE openMsg isOpen acc =
                 openAttributes
                 [ Element.text acc.content
                 ]
+
           else
             Element.none
         ]
@@ -482,6 +488,7 @@ accordionElmCss openMsg isOpen acc =
             [ StyledAttrs.css
                 [ if isOpen then
                     Css.height Css.auto
+
                   else
                     Css.height Css.zero
                 , Css.overflow Css.hidden
