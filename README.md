@@ -1,5 +1,10 @@
 
-You can open the [test app here](https://rawgit.com/webbhuset/test-elm-performance/master/index.html) and try it on your device. Just choose your prefered settings and hit "Run Test".
+You can open the test app and try it on your device:
+
+* [Elm 0.18](https://rawgit.com/webbhuset/test-elm-performance/master/index.html)
+* [Elm 0.19](https://rawgit.com/webbhuset/test-elm-performance/master/0.19/index.html)
+
+Just choose your prefered settings and hit "Run Test".
 
 ## What is this?
 
