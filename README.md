@@ -6,6 +6,8 @@ You can open the test app and try it on your device:
 
 Just choose your prefered settings and hit "Run Test".
 
+Check the [results](https://rawgit.com/webbhuset/test-elm-performance/master/results/charts.html).
+
 ## What is this?
 
 This is a simple, non-scientific test of the render performance of the Elm Virtual DOM. I
